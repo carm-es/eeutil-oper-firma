@@ -1,28 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-            
-    
-    <wb-module deploy-name="eeutil-oper-firma">
-                        
-        
-        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
-                        
-        
-        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-                        
-        
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-                        
-        
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-                        
-        
-        <property name="context-root" value="eeutil-oper-firma"/>
-                        
-        
-        <property name="java-output-path" value="/eeutil-oper-firma/target/classes"/>
                     
     
-    </wb-module>
+    
+    
+    <wb-module deploy-name="eeutil-oper-firma">
+                                        
         
+        
+        
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+                                        
+        
+        
+        
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+                                        
+        
+        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+                                        
+        
+        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+                
+        <dependent-module archiveName="eeutil-comunes-4.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/eeutil-comunes/eeutil-comunes">
+                        
+            <dependency-type>uses</dependency-type>
+                    
+        </dependent-module>
+                
+        <dependent-module archiveName="eeutil-services-4.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/eeutil-services/eeutil-services">
+                        
+            <dependency-type>uses</dependency-type>
+                    
+        </dependent-module>
+                
+        <dependent-module archiveName="eeutil-model-4.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/eeutil-model/eeutil-model">
+                        
+            <dependency-type>uses</dependency-type>
+                    
+        </dependent-module>
+                
+        <dependent-module archiveName="eeutil-inside-stub-2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/eeutil-inside-stub/eeutil-inside-stub">
+                        
+            <dependency-type>uses</dependency-type>
+                    
+        </dependent-module>
+                
+        <dependent-module archiveName="eeutil-util-4.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/eeutil-util/eeutil-util">
+                        
+            <dependency-type>uses</dependency-type>
+                    
+        </dependent-module>
+                
+        <dependent-module archiveName="eeutil-afirmaws-stub-4.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/eeutil-afirmaws-stub/eeutil-afirmaws-stub">
+                        
+            <dependency-type>uses</dependency-type>
+                    
+        </dependent-module>
+                                        
+        
+        
+        
+        <property name="context-root" value="eeutil-oper-firma"/>
+                                        
+        
+        
+        
+        <property name="java-output-path" value="/eeutil-oper-firma/target/classes"/>
+                                    
+    
+    
+    
+    </wb-module>
+                
+
+
 
 </project-modules>

@@ -1,28 +1,30 @@
-<!-- Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed 
-	and may be used, modified and redistributed under the terms of the European 
-	Public License (EUPL), either version 1.1 or (at your option) any later version 
-	as soon as they are approved by the European Commission. Unless required 
-	by applicable law or agreed to in writing, software distributed under the 
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-	OF ANY KIND, either express or implied. See the License for the specific 
-	language governing permissions and more details. You should have received 
-	a copy of the EUPL1.1 license along with this program; if not, you may find 
-	it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl -->
+<!-- Copyright (C) 2012-13 MINHAP, Gobierno de España
+   This program is licensed and may be used, modified and redistributed under the terms
+   of the European Public License (EUPL), either version 1.1 or (at your
+   option) any later version as soon as they are approved by the European Commission.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+   or implied. See the License for the specific language governing permissions and
+   more details.
+   You should have received a copy of the EUPL1.1 license
+   along with this program; if not, you may find it at
+   http://joinup.ec.europa.eu/software/page/eupl/licence-eupl -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.gob.aapp.eeutil</groupId>
 	<artifactId>eeutil-mvn-base</artifactId>
-	<version>4.1</version>
+	<version>4.1</version>	
 	<packaging>pom</packaging>
 	<description>Librerias del proyecto Eeutil</description>
 
-	<!-- scm> <connection>scm:svn:svn://dev.map.es/repo/svn/InSide/trunk/Desarrollo/inside-mvn-base</connection> 
-		<developerConnection>scm:svn:svn+ssh://{mpt.username}@dev.map.es/repo/svn/InSide/trunk/Desarrollo/inside-mvn-base</developerConnection> 
-		<url>http://dev.map.es/trac/InSide/browser/trunk/Desarrollo/inside-mvn-base/</url> 
-		</scm -->
+	<!-- scm>
+		<connection>scm:svn:svn://dev.map.es/repo/svn/InSide/trunk/Desarrollo/inside-mvn-base</connection>
+		<developerConnection>scm:svn:svn+ssh://{mpt.username}@dev.map.es/repo/svn/InSide/trunk/Desarrollo/inside-mvn-base</developerConnection>
+		<url>http://dev.map.es/trac/InSide/browser/trunk/Desarrollo/inside-mvn-base/</url>
+	</scm-->
 
 	<organization>
 		<name>Ministerio de Politica Territorial y Administración Pública</name>
@@ -126,11 +128,11 @@
 				<artifactId>spring-jms</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-
+			
 			<dependency>
-				<groupId>org.springframework.data</groupId>
-				<artifactId>spring-data-jpa</artifactId>
-				<version>${spring.spring-data-jpa.version}</version>
+			    <groupId>org.springframework.data</groupId>
+			    <artifactId>spring-data-jpa</artifactId>
+			   	<version>${spring.spring-data-jpa.version}</version>
 			</dependency>
 
 
@@ -360,67 +362,37 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<scm>
-		<connection>scm:git:https://github.com/abilionavarro/Eeutil-Oper-Firma.git</connection>
-		<developerConnection>scm:git:[push=]https://github.com/abilionavarro/Eeutil-Oper-Firma.git[fetch=]https://github.com/abilionavarro/Eeutil-Oper-Firma.git</developerConnection>
-		<url>https://github.com/abilionavarro/Eeutil-Oper-Firma.git</url>
-		<tag>HEAD</tag>
-	</scm>
-	<repositories>
-		<repository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-			</snapshots>
-			<id>Eeutil-Oper-Firma</id>
-			<name>Eeutil-Oper-Firma</name>
-			<url>https://raw.githubusercontent.comabilionavarro/Eeutil-Oper-Firma/mvn-repo</url>
-		</repository>
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>Central Repository</name>
-			<url>https://repo.maven.apache.org/maven2</url>
-		</repository>
-	</repositories>
-	
-	<distributionManagement>
-		<repository>
-			<id>maven-mpt-es-libs-release</id>
-			<name>maven-mpt-es-libs-release</name>
-			<url>http://maven.mpt.es/artifactory/libs-release-local</url>
-		</repository>
-
-		<snapshotRepository>
-			<id>maven-mpt-es-libs-snapshot</id>
-			<name>maven-mpt-es-libs-snapshot</name>
-			<url>http://maven.mpt.es/artifactory/libs-snapshot-local</url>
-		</snapshotRepository>
+	<distributionManagement>  
+	    <repository>
+	      <id>maven-mpt-es-libs-release</id>
+	      <name>maven-mpt-es-libs-release</name>
+		  <url>http://maven.mpt.es/artifactory/libs-release-local</url>
+	    </repository>
+	    
+	    <snapshotRepository>
+	      <id>maven-mpt-es-libs-snapshot</id>
+	      <name>maven-mpt-es-libs-snapshot</name>
+		<url>http://maven.mpt.es/artifactory/libs-snapshot-local</url>
+	    </snapshotRepository>
 	</distributionManagement>
-
+	
 	<modules>
-		<module>../eeutil-afirmaws-stub</module>
-		<!-- <module>../eeutil-csvbroker-stub</module> -->
-		<!-- <module>../eeutil-csvstoragews-stub</module> -->
-		<module>../eeutil-inside-stub</module>
-		<module>../eeutil-model</module>
+        <module>../eeutil-afirmaws-stub</module>
+<!--         <module>../eeutil-csvbroker-stub</module> -->
+<!--         <module>../eeutil-csvstoragews-stub</module> -->
+     	<module>../eeutil-inside-stub</module>
+     	<module>../eeutil-model</module>
 		<module>../eeutil-pdf-conversion</module>
-		<module>../eeutil-pdf-conversion-igae</module>
-		<module>../eeutil-services</module>
-		<module>../eeutil-comunes</module>
-		<module>../eeutil-util</module>
-		<module>../load-tables</module>
-		<!-- <module>../eeutil-firma</module> -->
-		<!-- <module>../eeutil-misc</module> -->
-		<module>../eeutil-oper-firma</module>
-		<!-- <module>../eeutil-util-firma</module> -->
-		<!-- <module>../eeutil-vis-docexp</module> -->
+        <module>../eeutil-pdf-conversion-igae</module>        
+        <module>../eeutil-services</module>
+        <module>../eeutil-comunes</module>
+        <module>../eeutil-util</module>
+        <module>../load-tables</module>
+<!--         <module>../eeutil-firma</module> -->
+<!--         <module>../eeutil-misc</module> -->
+        <module>../eeutil-oper-firma</module>
+<!--         <module>../eeutil-util-firma</module> -->
+<!--         <module>../eeutil-vis-docexp</module> -->
 	</modules>
 
 	<build>
@@ -477,10 +449,10 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
-					<encoding>ISO-8859-1</encoding>
+                    <encoding>ISO-8859-1</encoding>
 				</configuration>
 			</plugin>
-
+			
 			<!-- Configuración de tests para que obtengan la configuración del directorio 
 				correspondiente al perfil -->
 			<plugin>
