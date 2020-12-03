@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>es.gob.aapp.eeutil</groupId>
+	<artifactId>wrapper-eeutil-mvn-base</artifactId>
+	<version>0.0.1-CARM-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>eeutil-vis-docexp</name>
+	
+	<scm>
+		<connection>scm:git:https://github.com/aid35y/Eeutil-Vis-Docexp.git</connection>
+		<developerConnection>scm:git:[push=]https://github.com/aid35y/Eeutil-Vis-Docexp.git[fetch=]https://github.com/aid35y/Eeutil-Vis-Docexp.git</developerConnection>
+		<url>https://github.com/aid35y/Eeutil-Vis-Docexp.git</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<licenses>
+		<license>
+			<name>EUPL</name>
+			<url>https://joinup.ec.europa.eu/sites/default/files/eupl1.1.-licence-es_0.pdf</url>
+		</license>
+	</licenses>
+
+	<properties>
+		<version.java>1.8</version.java>
+		<codificacion>UTF-8</codificacion>
+	</properties>
+
+	<modules>
+		<module>eeutil-mvn-base</module>
+	</modules>
+
+</project>
