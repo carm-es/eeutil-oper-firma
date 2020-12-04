@@ -5,16 +5,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.gob.aapp.eeutil</groupId>
-	<artifactId>wrapper-eeutil-mvn-base</artifactId>
+	<artifactId>eeutil-oper-firma</artifactId>
 	<version>0.0.1-CARM-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>eeutil-vis-docexp</name>
+	<name>eeutil-oper-firma</name>
 	
 	<scm>
-		<connection>scm:git:https://github.com/aid35y/Eeutil-Vis-Docexp.git</connection>
-		<developerConnection>scm:git:[push=]https://github.com/aid35y/Eeutil-Vis-Docexp.git[fetch=]https://github.com/aid35y/Eeutil-Vis-Docexp.git</developerConnection>
-		<url>https://github.com/aid35y/Eeutil-Vis-Docexp.git</url>
+		<connection>scm:git:https://github.com/abilionavarro/eeutil-oper-firma.git</connection>
+		<developerConnection>scm:git:[push=]https://github.com/abilionavarro/eeutil-oper-firma.git[fetch=]https://github.com/abilionavarro/eeutil-oper-firma.git</developerConnection>
+		<url>https://github.com/abilionavarro/eeutil-oper-firma.git</url>
 		<tag>HEAD</tag>
 	</scm>
 
