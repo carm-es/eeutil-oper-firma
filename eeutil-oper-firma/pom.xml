@@ -23,7 +23,6 @@
 		<groupId>es.gob.aapp.eeutil</groupId>
 		<artifactId>eeutil-mvn-base</artifactId>
 		<version>4.1</version>
-		<relativePath>../eeutil-mvn-base</relativePath>
 	</parent>
 
 	<properties>
@@ -174,15 +173,15 @@
 	        <activation>
 		      <activeByDefault>true</activeByDefault>
 		    </activation>
-<!-- 	        <dependencies> -->
-<!-- 	            <dependency> -->
-<!-- 					<groupId>com.oracle</groupId> -->
-<!-- 					<artifactId>ojdbc6</artifactId> -->
-<!-- 					<version>11.2.0.4.0</version> -->
-<!-- 					<type>jar</type> -->
-<!-- 					<scope>provided</scope> -->
-<!-- 				</dependency> -->
-<!-- 	        </dependencies> -->
+	        <dependencies>
+	            <dependency>
+					<groupId>com.oracle</groupId>
+					<artifactId>ojdbc6</artifactId>
+					<version>11.2.0.4</version>
+					<type>jar</type>
+					<scope>provided</scope>
+				</dependency>
+	        </dependencies>
 	    </profile>
 	    <profile>
 	        <id>debug</id>
@@ -190,7 +189,7 @@
 	            <dependency>
 					<groupId>com.oracle</groupId>
 					<artifactId>ojdbc6</artifactId>
-					<version>11.2.0.4.0</version>
+					<version>11.2.0.4</version>
 				</dependency>
 				<dependency>
 					<groupId>mysql</groupId>
