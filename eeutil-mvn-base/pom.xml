@@ -37,7 +37,7 @@
             eeutil-oper-firma
         </artifactId> 
         <version>
-            0.0.1-CARM-SNAPSHOT
+            4.2.0-CARM.1-SNAPSHOT
         </version> 
     </parent> 
     <!-- scm>

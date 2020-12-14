@@ -34,7 +34,7 @@
             eeutil-mvn-base
         </artifactId> 
         <version>
-            4.1
+            4.2.0-CARM.1-SNAPSHOT
         </version> 
         <relativePath>
             ../eeutil-mvn-base
