@@ -9,21 +9,29 @@
    more details.
    You should have received a copy of the EUPL1.1 license
    along with this program; if not, you may find it at
-   http://joinup.ec.europa.eu/software/page/eupl/licence-eupl -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>eeutil-inside-stub</artifactId>
-	<version>2.1</version>
-
-	<parent>
-		<groupId>es.gob.aapp.eeutil</groupId>
-		<artifactId>eeutil-mvn-base</artifactId>
-		<version>4.1</version>
-		<relativePath>../eeutil-mvn-base</relativePath>
-	</parent>
-	
-	
-	
+   http://joinup.ec.europa.eu/software/page/eupl/licence-eupl --> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
+    <modelVersion>
+        4.0.0
+    </modelVersion> 
+    <artifactId>
+        eeutil-inside-stub
+    </artifactId> 
+    <version>
+        2.1
+    </version> 
+    <parent> 
+        <groupId>
+            es.gob.aapp.eeutil
+        </groupId> 
+        <artifactId>
+            eeutil-mvn-base
+        </artifactId> 
+        <version>
+            4.1
+        </version> 
+        <relativePath>
+            ../eeutil-mvn-base
+        </relativePath> 
+    </parent> 
 </project>
