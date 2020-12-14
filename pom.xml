@@ -5,12 +5,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.gob.aapp.eeutil</groupId>
-	<artifactId>eeutil-oper-firma</artifactId>
-	<version>0.0.1-CARM-SNAPSHOT</version>
+	<artifactId>wrapper-eeutil-mvn-base</artifactId>
+	<version>4.1-CARM.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>eeutil-oper-firma</name>
-	
+
 	<scm>
 		<connection>scm:git:https://github.com/abilionavarro/eeutil-oper-firma.git</connection>
 		<developerConnection>scm:git:[push=]https://github.com/abilionavarro/eeutil-oper-firma.git[fetch=]https://github.com/abilionavarro/eeutil-oper-firma.git</developerConnection>
@@ -33,5 +33,119 @@
 	<modules>
 		<module>eeutil-mvn-base</module>
 	</modules>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Formateo de código fuente -->
+				<plugin>
+					<groupId>net.revelc.code.formatter</groupId>
+					<artifactId>formatter-maven-plugin</artifactId>
+					<version>2.8.1</version>
+					<configuration>
+						<configFile>/.mvn/eclipse-java-google-style.xml</configFile>
+						<encoding>UTF-8</encoding>
+						<lineEnding>AUTO</lineEnding>
+						<directories>
+							<directory>${basedir}/src/main/java</directory>
+							<directory>${basedir}/src/main/resources</directory>
+							<directory>${basedir}/src/test/java</directory>
+							<directory>${basedir}/src/test/resources</directory>
+						</directories>
+						<excludes>
+							<exclude>**/*.html</exclude>
+							<exclude>**/*.*css</exclude>
+							<exclude>**/*.wsdl</exclude>
+							<exclude>**/*.xml</exclude>
+							<exclude>**/*.xsd</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+				<!-- Añadir git-hook en el precomit para formatear automáticamente el 
+					código fuente -->
+				<plugin>
+					<groupId>io.github.phillipuniverse</groupId>
+					<artifactId>githook-maven-plugin</artifactId>
+					<version>1.0.4</version>
+					<configuration>
+						<hooks>
+							<pre-commit>mvn
+								net.revelc.code.formatter:formatter-maven-plugin:format</pre-commit>
+						</hooks>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>${version.java}</source>
+						<target>${version.java}</target>
+						<encoding>${codificacion}</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.4</version>
+					<configuration>
+						<encoding>${codificacion}</encoding>
+					</configuration>
+				</plugin>
+				<!-- This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>io.github.phillipuniverse</groupId>
+										<artifactId>githook-maven-plugin</artifactId>
+										<versionRange>[1.0.4,)</versionRange>
+										<goals>
+											<goal>install</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<!-- Por defecto, que formatee el código fuente -->
+			<plugin>
+				<groupId>net.revelc.code.formatter</groupId>
+				<artifactId>formatter-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>format</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Por defecto, instalar los hooks de git en el cliente, cuando se invoque 
+				a maven -->
+			<plugin>
+				<groupId>io.github.phillipuniverse</groupId>
+				<artifactId>githook-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>install</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
