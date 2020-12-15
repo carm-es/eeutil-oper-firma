@@ -19,7 +19,7 @@
     </groupId> 
     <artifactId>
         eeutil-mvn-base
-    </artifactId>  
+    </artifactId>	  
     <packaging>
         pom
     </packaging> 

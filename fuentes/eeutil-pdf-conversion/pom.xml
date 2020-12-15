@@ -16,7 +16,8 @@
     </modelVersion> 
     <artifactId>
         eeutil-pdf-conversion
-    </artifactId>  
+    </artifactId>
+    <version>4.2</version>  
     <parent> 
         <groupId>
             es.gob.aapp.eeutil

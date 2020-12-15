@@ -14,7 +14,8 @@
     </modelVersion> 
     <artifactId>
         eeutil-oper-firma
-    </artifactId> 
+    </artifactId>
+	<version>4.0.6</version>	
     <packaging>
         war
     </packaging> 

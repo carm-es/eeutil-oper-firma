@@ -19,7 +19,8 @@
     </artifactId> 
     <description>
         Carga tablas Eeutil
-    </description> 
+    </description>
+    <version>2.1</version> 
     <packaging>
         jar
     </packaging> 

@@ -17,6 +17,7 @@
     <artifactId>
         eeutil-inside-stub
     </artifactId> 
+    <version>2.1</version>
     <parent> 
         <groupId>
             es.gob.aapp.eeutil

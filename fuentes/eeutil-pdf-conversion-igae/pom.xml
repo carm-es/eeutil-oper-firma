@@ -16,7 +16,8 @@
     </modelVersion> 
     <groupId>
         es.gob.aapp.eeutil
-    </groupId> 
+    </groupId>
+    <version>4.2</version> 
     <artifactId>
         eeutil-pdf-conversion-igae
     </artifactId> 

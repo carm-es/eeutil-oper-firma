@@ -16,7 +16,8 @@
     </modelVersion> 
     <artifactId>
         eeutil-afirmaws-stub
-    </artifactId>  
+    </artifactId>
+    <version>4.2</version>  
     <properties> 
         <afirma.version>
             5.0
