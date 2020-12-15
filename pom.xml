@@ -31,7 +31,7 @@
 	</properties>
 
 	<modules>
-		<module>eeutil-mvn-base</module>
+		<module>fuentes/eeutil-mvn-base</module>
 	</modules>
 
 	<build>

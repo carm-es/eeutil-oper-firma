@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:context="http://www.springframework.org/schema/context" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd 
+                        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd"> 
+    <bean id="serverAuthenticationCallback" class="es.mpt.dsic.inside.security.wss4j.ServerAuthenticationCallback" /> 
+    <bean id="wSS4JUserTokenInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor"> 
+        <constructor-arg> 
+            <map> 
+                <entry value="UsernameToken"> 
+                    <key> 
+                        <util:constant static-field="org.apache.ws.security.handler.WSHandlerConstants.ACTION" /> 
+                    </key> 
+                </entry> 
+                <entry value="PasswordText"> 
+                    <key> 
+                        <util:constant static-field="org.apache.ws.security.handler.WSHandlerConstants.PASSWORD_TYPE" /> 
+                    </key> 
+                </entry> 
+                <entry key="passwordCallbackRef"> 
+                    <ref bean="serverAuthenticationCallback" /> 
+                </entry> 
+            </map> 
+        </constructor-arg> 
+    </bean> 
+    <bean id="customUserTokenValidator" class="es.mpt.dsic.inside.security.wss4j.CustomUserTokenValidator" /> 
+    <bean id="userTokenAuthenticationInterceptor" class="es.mpt.dsic.inside.security.interceptor.UserTokenAuthenticationInterceptor"> 
+        <property name="authenticationManager" ref="certificateAutenticationManager" /> 
+    </bean> 
+</beans>
