@@ -8,7 +8,7 @@
 
   <parent>
     <groupId>es.gob.aapp.eeutil</groupId>
-    <artifactId>eeutil-mvn-base</artifactId>
+    <artifactId>eeutil-mvn-base-oper-firma</artifactId>
     <version>4.2.0-CARM.1-SNAPSHOT</version>
     <relativePath>../eeutil-mvn-base</relativePath>
   </parent>
@@ -58,12 +58,12 @@
     <dependency>
       <groupId>es.gob.aapp.eeutil</groupId>
       <artifactId>eeutil-comunes</artifactId>
-      <version>4.2.0-CARM.1-SNAPSHOT</version>
+      <version>${version.eeutils-shared}</version>
     </dependency>
     <dependency>
       <groupId>es.gob.aapp.eeutil</groupId>
       <artifactId>eeutil-afirmaws-stub</artifactId>
-      <version>4.2.0-CARM.1-SNAPSHOT</version>
+      <version>${version.eeutils-shared}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
