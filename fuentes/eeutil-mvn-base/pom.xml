@@ -10,7 +10,7 @@
   <parent>
     <groupId>es.carm.eeutil</groupId>
     <artifactId>oper-firma-mvn-base-wrapper</artifactId>
-    <version>4.2.0-CARM.1-SNAPSHOT</version>
+    <version>4.2.0-CARM.1</version>
     <relativePath>../..</relativePath>
   </parent>
 
@@ -21,7 +21,7 @@
   </modules>
 
   <organization>
-    <name>Ministerio de Politica Territorial y Administraci&#xF3;n P&#xFA;blica</name>
+    <name>Ministerio de Politica Territorial y Administración Pública</name>
     <url>http://www.mpt.es</url>
   </organization>
 
