@@ -9,7 +9,7 @@
   <parent>
     <groupId>es.gob.aapp.eeutil</groupId>
     <artifactId>eeutil-mvn-base-oper-firma</artifactId>
-    <version>4.2.0-CARM.2-SNAPSHOT</version>
+    <version>4.2.0-CARM.2</version>
     <relativePath>../eeutil-mvn-base</relativePath>
   </parent>
 

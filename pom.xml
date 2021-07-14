@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.carm.eeutil</groupId>
 	<artifactId>oper-firma-mvn-base-wrapper</artifactId>
-	<version>4.2.0-CARM.2-SNAPSHOT</version>
+	<version>4.2.0-CARM.2</version>
 	<packaging>pom</packaging>
 
 	<name>eeutil-oper-firma</name>
@@ -20,7 +20,7 @@
 		<connection>scm:git:https://github.com/carm-es/eeutil-oper-firma.git</connection>
 		<developerConnection>scm:git:[push=]https://github.com/carm-es/eeutil-oper-firma.git[fetch=]https://github.com/carm-es/eeutil-oper-firma.git</developerConnection>
 		<url>https://github.com/carm-es/eeutil-oper-firma.git</url>
-		<tag>HEAD</tag>
+		<tag>v4.2.0-CARM.2</tag>
 	</scm>
 
 	<properties>
