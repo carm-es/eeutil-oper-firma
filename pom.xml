@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 
 	<name>eeutil-oper-firma</name>
+        <inceptionYear>2020</inceptionYear>
 
 	<licenses>
 		<license>
@@ -26,7 +27,7 @@
 	<properties>
 		<version.java>1.8</version.java>
 		<codificacion>UTF-8</codificacion>
-		<version.eeutils-shared>4.2.0-CARM.2</version.eeutils-shared>
+		<version.eeutils-shared>4.2.0-CARM.4</version.eeutils-shared>
 	</properties>
 
 	<repositories>

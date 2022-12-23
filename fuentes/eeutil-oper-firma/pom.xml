@@ -154,6 +154,7 @@
           <artifactId>mysql-connector-java</artifactId>
           <version>3.1.14</version>
           <type>jar</type>
+	  <scope>provided</scope>
         </dependency>
       </dependencies>
     </profile>
@@ -171,6 +172,7 @@
           <artifactId>mysql-connector-java</artifactId>
           <version>3.1.14</version>
           <type>jar</type>
+	  <scope>provided</scope>
         </dependency>
       </dependencies>
     </profile>
