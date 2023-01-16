@@ -27,7 +27,7 @@
 	<properties>
 		<version.java>1.8</version.java>
 		<codificacion>UTF-8</codificacion>
-		<version.eeutils-shared>4.2.0-CARM.4</version.eeutils-shared>
+		<version.eeutils-shared>4.2.0-CARM.7</version.eeutils-shared>
 	</properties>
 
 	<repositories>
