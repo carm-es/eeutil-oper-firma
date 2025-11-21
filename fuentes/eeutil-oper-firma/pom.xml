@@ -20,9 +20,11 @@
 
   <dependencies>
     <!-- UTILS -->
+    <!-- jrc29v la versión de la dependencia siguiente la he puesto yo por indicación de la compilación -->
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
+      <version>1.8.13</version>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
@@ -39,7 +41,7 @@
       <version>2.8.0</version>
     </dependency>
     <dependency>
-     <groupId>com.lmax</groupId>
+      <groupId>com.lmax</groupId>
       <artifactId>disruptor</artifactId>
       <version>3.4.2</version>
     </dependency>
@@ -151,7 +153,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-	<version>3.3.1</version>
+        <version>3.3.1</version>
         <configuration>
           <webResources>
             <resource>
@@ -194,7 +196,7 @@
           <artifactId>mysql-connector-java</artifactId>
           <version>3.1.14</version>
           <type>jar</type>
-	  <scope>provided</scope>
+          <scope>provided</scope>
         </dependency>
       </dependencies>
     </profile>
@@ -212,7 +214,7 @@
           <artifactId>mysql-connector-java</artifactId>
           <version>3.1.14</version>
           <type>jar</type>
-	  <scope>provided</scope>
+          <scope>provided</scope>
         </dependency>
       </dependencies>
     </profile>

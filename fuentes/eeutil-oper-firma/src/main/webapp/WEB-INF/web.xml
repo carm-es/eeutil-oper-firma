@@ -17,7 +17,7 @@
     <!-- Creates the Spring Container shared by all Servlets and Filters --> 
     <context-param>
       <param-name>log4jConfiguration</param-name>
-      <param-value>file:${sys:catalina.home}/conf/eeutil-oper-firma/log4j2.xml</param-value>
+      <param-value>file:///${sys:catalina.home}/conf/eeutil-oper-firma/log4j2.xml</param-value>
     </context-param>
     <listener>
         <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
