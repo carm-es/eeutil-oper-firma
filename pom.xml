@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 
 	<name>eeutil-oper-firma</name>
+  	<description>Componente de las Eeutils de la AGE, que implementa operaciones de firma</description>
 	<inceptionYear>2020</inceptionYear>
 
 	<licenses>
