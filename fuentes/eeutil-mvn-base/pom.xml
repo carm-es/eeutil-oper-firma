@@ -10,7 +10,7 @@
   <parent>
     <groupId>es.carm.eeutil</groupId>
     <artifactId>oper-firma-mvn-base-wrapper</artifactId>
-    <version>4.2.0-CARM.6</version>
+    <version>4.2.0-CARM.7-SNAPSHOT</version>
     <relativePath>../..</relativePath>
   </parent>
 
