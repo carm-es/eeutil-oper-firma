@@ -1,29 +1,31 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.security.wss4j;
 
 import java.io.IOException;
+
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.UnsupportedCallbackException;
+
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.ws.security.WSConstants;
-import org.apache.ws.security.WSPasswordCallback;
-import org.apache.ws.security.WSSConfig;
-import org.apache.ws.security.WSSecurityException;
-import org.apache.ws.security.handler.RequestData;
-import org.apache.ws.security.message.token.UsernameToken;
-import org.apache.ws.security.util.Base64;
-import org.apache.ws.security.validate.Credential;
-import org.apache.ws.security.validate.Validator;
+import org.apache.wss4j.common.ext.WSPasswordCallback;
+import org.apache.wss4j.common.ext.WSSecurityException;
+import org.apache.wss4j.dom.WSConstants;
+import org.apache.wss4j.dom.handler.RequestData;
+import org.apache.wss4j.dom.message.token.UsernameToken;
+import org.apache.wss4j.dom.validate.Credential;
+import org.apache.wss4j.dom.validate.Validator;
+import org.apache.xml.security.exceptions.Base64DecodingException;
+import org.apache.xml.security.utils.Base64;
 
 public class CustomUserTokenValidator implements Validator {
 
@@ -46,18 +48,19 @@ public class CustomUserTokenValidator implements Validator {
    */
   public Credential validate(Credential credential, RequestData data) throws WSSecurityException {
     if (credential == null || credential.getUsernametoken() == null) {
-      throw new WSSecurityException(WSSecurityException.FAILURE, "noCredential");
+      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "noCredential");
     }
 
-    boolean handleCustomPasswordTypes = false;
+    // boolean handleCustomPasswordTypes = false;
     boolean passwordsAreEncoded = false;
-    String requiredPasswordType = null;
-    WSSConfig wssConfig = data.getWssConfig();
-    if (wssConfig != null) {
-      handleCustomPasswordTypes = wssConfig.getHandleCustomPasswordTypes();
-      passwordsAreEncoded = wssConfig.getPasswordsAreEncoded();
-      requiredPasswordType = wssConfig.getRequiredPasswordType();
-    }
+    // String requiredPasswordType = null;
+    // WSSConfig wssConfig = data.getWssConfig();
+    /*
+     * if (wssConfig != null) { handleCustomPasswordTypes =
+     * wssConfig.getHandleCustomPasswordTypes(); passwordsAreEncoded =
+     * wssConfig.getPasswordsAreEncoded(); requiredPasswordType =
+     * wssConfig.getRequiredPasswordType(); }
+     */
 
     UsernameToken usernameToken = credential.getUsernametoken();
     usernameToken.setPasswordsAreEncoded(passwordsAreEncoded);
@@ -68,13 +71,13 @@ public class CustomUserTokenValidator implements Validator {
       log.debug("UsernameToken password type " + pwType);
     }
 
-    if (requiredPasswordType != null && !requiredPasswordType.equals(pwType)) {
-      if (log.isDebugEnabled()) {
-        log.debug("Authentication failed as the received password type does not "
-            + "match the required password type of: " + requiredPasswordType);
-      }
-      throw new WSSecurityException(WSSecurityException.FAILED_AUTHENTICATION);
-    }
+    /*
+     * if (requiredPasswordType != null && !requiredPasswordType.equals(pwType)) { if
+     * (log.isDebugEnabled()) {
+     * log.debug("Authentication failed as the received password type does not " +
+     * "match the required password type of: " + requiredPasswordType); } throw new
+     * WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION); }
+     */
 
     //
     // If the UsernameToken is hashed or plaintext, then retrieve the password from the
@@ -88,12 +91,11 @@ public class CustomUserTokenValidator implements Validator {
         || (password != null && (pwType == null || "".equals(pwType.trim())))) {
       verifyPlaintextPassword(usernameToken, data);
     } else if (password != null) {
-      if (!handleCustomPasswordTypes) {
-        if (log.isDebugEnabled()) {
-          log.debug("Authentication failed as handleCustomUsernameTokenTypes is false");
-        }
-        throw new WSSecurityException(WSSecurityException.FAILED_AUTHENTICATION);
-      }
+      /*
+       * if (!handleCustomPasswordTypes) { if (log.isDebugEnabled()) {
+       * log.debug("Authentication failed as handleCustomUsernameTokenTypes is false"); } throw new
+       * WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION); }
+       */
       verifyCustomPassword(usernameToken, data);
     } else {
       verifyUnknownPassword(usernameToken, data);
@@ -142,7 +144,7 @@ public class CustomUserTokenValidator implements Validator {
   protected void verifyDigestPassword(UsernameToken usernameToken, RequestData data)
       throws WSSecurityException {
     if (data.getCallbackHandler() == null) {
-      throw new WSSecurityException(WSSecurityException.FAILURE, "noCallback");
+      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "noCallback");
     }
 
     String user = usernameToken.getName();
@@ -153,42 +155,52 @@ public class CustomUserTokenValidator implements Validator {
     boolean passwordsAreEncoded = usernameToken.getPasswordsAreEncoded();
 
     WSPasswordCallback pwCb =
-        new WSPasswordCallback(user, null, pwType, WSPasswordCallback.USERNAME_TOKEN, data);
+        new WSPasswordCallback(user, null, pwType, WSPasswordCallback.USERNAME_TOKEN);
     try {
       data.getCallbackHandler().handle(new Callback[] {pwCb});
     } catch (IOException e) {
       if (log.isDebugEnabled()) {
         log.debug(e);
       }
-      throw new WSSecurityException(WSSecurityException.FAILED_AUTHENTICATION, null, null, e);
+      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION, e,
+          e.getMessage());
     } catch (UnsupportedCallbackException e) {
       if (log.isDebugEnabled()) {
         log.debug(e);
       }
-      throw new WSSecurityException(WSSecurityException.FAILED_AUTHENTICATION, null, null, e);
+      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION, e,
+          e.getMessage());
     }
     String origPassword = pwCb.getPassword();
     if (origPassword == null) {
       if (log.isDebugEnabled()) {
         log.debug("Callback supplied no password for: " + user);
       }
-      throw new WSSecurityException(WSSecurityException.FAILED_AUTHENTICATION);
+      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION,
+          "Password no sumisitrado para el usuario: " + user);
     }
     if (usernameToken.isHashed()) {
       String passDigest;
       if (passwordsAreEncoded) {
-        passDigest =
-            UsernameToken.doPasswordDigest(nonce, createdTime, Base64.decode(origPassword));
+        try {
+          passDigest =
+              UsernameToken.doPasswordDigest(nonce, createdTime, Base64.decode(origPassword));
+        } catch (Base64DecodingException e) {
+          throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION, e,
+              e.getMessage());
+        }
       } else {
         passDigest = UsernameToken.doPasswordDigest(nonce, createdTime, origPassword);
       }
       if (!passDigest.equals(password)) {
-        throw new WSSecurityException(WSSecurityException.FAILED_AUTHENTICATION);
+        log.error("Fallo al ingresar el password del usuario " + user);
+        throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION);
       }
     } else {
       String encodedPassword = DigestUtils.md5Hex(password);
       if (!origPassword.equals(encodedPassword)) {
-        throw new WSSecurityException(WSSecurityException.FAILED_AUTHENTICATION);
+        log.error("Fallo al ingresar el password del usuario " + user);
+        throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION);
       }
     }
   }

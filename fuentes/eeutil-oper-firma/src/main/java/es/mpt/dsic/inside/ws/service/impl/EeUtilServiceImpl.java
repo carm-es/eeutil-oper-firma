@@ -1,106 +1,129 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.ws.service.impl;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.UUID;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.ParameterStyle;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import es.gob.afirma.core.signers.AOSignerFactory;
-import es.mpt.dsic.inside.converter.AfirmaModelToWsModelConverter;
-import es.mpt.dsic.inside.converter.AfirmaValidationConverterType;
-import es.mpt.dsic.inside.exception.AfirmaException;
-import es.mpt.dsic.inside.model.InformacionFirmaAfirma;
-import es.mpt.dsic.inside.model.ResultadoAmpliarFirmaAfirma;
-import es.mpt.dsic.inside.security.context.AplicacionContext;
+import es.mpt.dsic.inside.aop.AuditEntryPointAnnotation;
+import es.mpt.dsic.inside.reflection.MapUtil;
+import es.mpt.dsic.inside.reflection.UtilReflection;
 import es.mpt.dsic.inside.security.model.ApplicationLogin;
-import es.mpt.dsic.inside.services.AfirmaService;
-import es.mpt.dsic.inside.utils.xml.XMLUtil;
+import es.mpt.dsic.inside.utils.exception.EeutilException;
 import es.mpt.dsic.inside.ws.service.EeUtilService;
 import es.mpt.dsic.inside.ws.service.exception.InSideException;
 import es.mpt.dsic.inside.ws.service.model.ConfiguracionAmpliarFirma;
 import es.mpt.dsic.inside.ws.service.model.DatosFirmados;
-import es.mpt.dsic.inside.ws.service.model.EstadoInfo;
 import es.mpt.dsic.inside.ws.service.model.InfoCertificado;
 import es.mpt.dsic.inside.ws.service.model.InformacionFirma;
 import es.mpt.dsic.inside.ws.service.model.ListaFirmaInfo;
 import es.mpt.dsic.inside.ws.service.model.OpcionesObtenerInformacionFirma;
 import es.mpt.dsic.inside.ws.service.model.ResultadoAmpliarFirma;
 import es.mpt.dsic.inside.ws.service.model.ResultadoComprobarFirmaFormatoA;
-import es.mpt.dsic.inside.ws.service.model.ResultadoValidacionFormatoAInfo;
+import es.mpt.dsic.inside.ws.service.model.ResultadoValidacionFirmaInfo;
 import es.mpt.dsic.inside.ws.service.model.ResultadoValidacionInfo;
 import es.mpt.dsic.inside.ws.service.model.ResultadoValidarCertificado;
-import es.mpt.dsic.inside.ws.service.postprocess.PostProcessException;
-import es.mpt.dsic.inside.ws.service.postprocess.PostProcessFactory;
-import es.mpt.dsic.inside.ws.service.postprocess.PostProcessor;
 
 @Service("eeUtilService")
 @WebService(endpointInterface = "es.mpt.dsic.inside.ws.service.EeUtilService")
 @SOAPBinding(style = Style.RPC, parameterStyle = ParameterStyle.BARE, use = Use.LITERAL)
 public class EeUtilServiceImpl implements EeUtilService {
 
-  protected final static Log logger = LogFactory.getLog(EeUtilServiceImpl.class);
+  private static final String EXTRA_PARA_M = "ExtraParaM";
 
-  @Autowired(required = false)
-  private AplicacionContext aplicacionContext;
+  private static final String DATOS_FIRMADOS_CONST = "datosFirmados";
+
+  private static final String TIPO_FIRMA_CONST = "tipoFirma";
+
+  private static final String FIRMA_CONST = "firma";
+
+  protected static final Log logger = LogFactory.getLog(EeUtilServiceImpl.class);
 
   @Autowired
-  private AfirmaService afirmaService;
+  EeutilOperFirmaServiceImplBusiness eeutilOperFirmaServiceImplBusiness;
 
-  public static final Charset UTF8_CHARSET = Charset.forName("UTF-8");
+  public static final Charset UTF8_CHARSET = StandardCharsets.UTF_8;
 
   @Override
+  @AuditEntryPointAnnotation(nombreApp = "EEUTIL-OPER-FIRMA")
   public ResultadoValidacionInfo validacionFirma(ApplicationLogin info, byte[] firma,
       String tipoFirma, DatosFirmados datosFirmados) throws InSideException {
 
-    if (firma == null) {
-      EstadoInfo estadoInfo = new EstadoInfo();
-      throw new InSideException("La firma no puede ser nula", estadoInfo,
-          new IllegalArgumentException());
+    try {
+      ResultadoValidacionInfo resinfo = eeutilOperFirmaServiceImplBusiness
+          .validacionFirma(info.getIdApplicacion(), firma, tipoFirma, datosFirmados);
+      return resinfo;
+
+    } catch (EeutilException e) {
+      if (e.getCOD_AFIRMA() != null) {
+        final String ln = System.getProperty("line.separator");
+        ResultadoValidacionInfo res = new ResultadoValidacionInfo();
+        res.setEstado(false);
+        StringBuilder mensaje = new StringBuilder("");
+        mensaje.append("CodigoError: " + e.getCOD_AFIRMA() + ln);
+        mensaje.append("Descripcion: " + "Validaci�n de Firma err�nea." + ln);
+        mensaje.append("ExcepcionAsociada: " + e.getMessage());
+        res.setDetalle(mensaje.toString());
+        return res;
+      } else {
+        ingresarMDCAppUUID(info.getIdApplicacion());
+        validacionFirmaMDC(firma, tipoFirma, datosFirmados);
+        logger.error(e.getMessage());
+        throw new InSideException(e.getMessage(), e);
+      }
+    } catch (Exception e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      validacionFirmaMDC(firma, tipoFirma, datosFirmados);
+      logger.error(e.getMessage());
+      throw new InSideException(e.getMessage(), e);
     }
 
-    logger.debug("Tipo de firma: " + tipoFirma);
-    String firmaElectronica64 = Base64.encodeBase64String(firma);
+  }
 
-    String datos64 = null;
-    String hash64 = null;
-    String algoritmo = null;
+  /**
+   * @param firma
+   * @param tipoFirma
+   * @param datosFirmados
+   */
+  private void validacionFirmaMDC(byte[] firma, String tipoFirma, DatosFirmados datosFirmados) {
+    try {
+      Object[] objs = new Object[3];
+      String[] strP = new String[] {FIRMA_CONST, TIPO_FIRMA_CONST, DATOS_FIRMADOS_CONST};
+      objs[0] = firma;
+      objs[1] = tipoFirma;
+      objs[2] = datosFirmados;
 
-    if (datosFirmados != null && datosFirmados.getDocumento() != null) {
-      datos64 = Base64.encodeBase64String(datosFirmados.getDocumento());
+      Map<String, String> mParametros =
+          UtilReflection.getInstance().extractMultipleDataPermitted(null, objs, strP);
+      String resultado = MapUtil.mapToString(mParametros);
+      MDC.put(EXTRA_PARA_M, resultado);
+
+    } catch (IOException e1) {
+
+      // si falla palante
+
     }
-
-    if (datosFirmados != null && datosFirmados.getHash() != null) {
-      hash64 = Base64.encodeBase64String(datosFirmados.getHash());
-    }
-
-    if (datosFirmados != null) {
-      algoritmo = datosFirmados.getAlgoritmo();
-    }
-
-    ResultadoValidacionInfo validaFirma = AfirmaModelToWsModelConverter
-        .resultadoValidacionInfoAfirmaToResultadoValidacionInfo(afirmaService.validarFirma(
-            info.getIdApplicacion(), firmaElectronica64, datos64, hash64, algoritmo, tipoFirma));
-
-    return validaFirma;
-
   }
 
   /**
@@ -112,27 +135,52 @@ public class EeUtilServiceImpl implements EeUtilService {
    * @throws InSideException
    */
   @Override
+  @AuditEntryPointAnnotation(nombreApp = "EEUTIL-OPER-FIRMA")
   public InformacionFirma obtenerInformacionFirma(ApplicationLogin aplicacion, byte[] firma,
       OpcionesObtenerInformacionFirma opciones, byte[] content) throws InSideException {
-    InformacionFirma info = null;
+
     try {
-      InformacionFirmaAfirma infoAfirma = afirmaService.obtenerInformacionFirma(
-          aplicacion.getIdApplicacion(), firma, opciones.isObtenerFirmantes(),
-          opciones.isObtenerDatosFirmados(), opciones.isObtenerTipoFirma(), content);
-      info = AfirmaModelToWsModelConverter.informacionFirmaAfirmaToInformacionFirma(infoAfirma);
-    } catch (AfirmaException e) {
-      logger.error("Error en obtenerInformacionFirma", e);
-      EstadoInfo estadoInfo = new EstadoInfo("ERROR", e.getCode(), e.getMessage());
-      throw new InSideException(estadoInfo.getDescripcion(), estadoInfo);
-    } catch (Throwable t) {
-      logger.error("Error en obtenerInformacionFirma", t);
-      EstadoInfo estadoInfo =
-          new EstadoInfo("ERROR", "ERROR INESPERADO AL OBTENER INFORMACION DE FIRMA", null);
-      throw new InSideException(estadoInfo.getDescripcion(), estadoInfo);
+      return eeutilOperFirmaServiceImplBusiness
+          .obtenerInformacionFirma(aplicacion.getIdApplicacion(), firma, opciones, content);
+
+    } catch (EeutilException e) {
+      ingresarMDCAppUUID(aplicacion.getIdApplicacion());
+      obtenerInformacionFirmaMDC(firma, opciones, content);
+      logger.error(e.getMessage());
+      throw new InSideException(e.getMessage(), e);
+    } catch (Exception e) {
+      ingresarMDCAppUUID(aplicacion.getIdApplicacion());
+      obtenerInformacionFirmaMDC(firma, opciones, content);
+      logger.error(e.getMessage());
+      throw new InSideException(e.getMessage(), e);
     }
 
-    return info;
+  }
 
+  /**
+   * @param firma
+   * @param opciones
+   * @param content
+   */
+  private void obtenerInformacionFirmaMDC(byte[] firma, OpcionesObtenerInformacionFirma opciones,
+      byte[] content) {
+    try {
+      Object[] objs = new Object[3];
+      String[] strP = new String[] {FIRMA_CONST, "opciones", "content"};
+      objs[0] = firma;
+      objs[1] = opciones;
+      objs[2] = content;
+
+      Map<String, String> mParametros =
+          UtilReflection.getInstance().extractMultipleDataPermitted(null, objs, strP);
+      String resultado = MapUtil.mapToString(mParametros);
+      MDC.put(EXTRA_PARA_M, resultado);
+
+    } catch (IOException e1) {
+
+      // si falla palante
+
+    }
   }
 
   /**
@@ -180,161 +228,405 @@ public class EeUtilServiceImpl implements EeUtilService {
    */
 
   @Override
+  @AuditEntryPointAnnotation(nombreApp = "EEUTIL-OPER-FIRMA")
   public ListaFirmaInfo obtenerFirmantes(ApplicationLogin info, byte[] firma, byte[] datos,
       String tipoFirma) throws InSideException {
-    OpcionesObtenerInformacionFirma opciones = new OpcionesObtenerInformacionFirma();
-    opciones.setObtenerDatosFirmados(false);
-    opciones.setObtenerFirmantes(true);
-    opciones.setObtenerTipoFirma(false);
 
-    InformacionFirma informacionFirma = this.obtenerInformacionFirma(info, firma, opciones, null);
+    try {
+      return eeutilOperFirmaServiceImplBusiness.obtenerFirmantes(info.getIdApplicacion(), firma);
 
-    return informacionFirma.getFirmantes();
+    } catch (EeutilException e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      obtenerFirmantesMDC(firma, datos, tipoFirma);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    } catch (Exception e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      obtenerFirmantesMDC(firma, datos, tipoFirma);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * @param firma
+   * @param datos
+   * @param tipoFirma
+   */
+  private void obtenerFirmantesMDC(byte[] firma, byte[] datos, String tipoFirma) {
+    try {
+      Object[] objs = new Object[3];
+      String[] strP = new String[] {FIRMA_CONST, "datos", TIPO_FIRMA_CONST};
+      objs[0] = firma;
+      objs[1] = datos;
+      objs[2] = tipoFirma;
+
+      Map<String, String> mParametros =
+          UtilReflection.getInstance().extractMultipleDataPermitted(null, objs, strP);
+
+      // indicamos que este parametro aunque es obligatorio, si se rellena ya esta sin uso en el
+      // negocio (datos)
+      if (mParametros.get("byte[].datos_tamano") != null
+          && !"0 bytes.".equals(mParametros.get("byte[].datos_tamano"))) {
+        mParametros.put("byte[].datos_tamano", mParametros.get("byte[].datos_tamano") + "/Sin uso");
+      }
+
+      String resultado = MapUtil.mapToString(mParametros);
+      MDC.put(EXTRA_PARA_M, resultado);
+
+    } catch (IOException e1) {
+
+      // si falla palante
+
+    }
   }
 
   /**
    * Obtiene el resultado de la validaci?n de un certificado
    */
   @Override
+  @AuditEntryPointAnnotation(nombreApp = "EEUTIL-OPER-FIRMA")
   public ResultadoValidarCertificado validarCertificado(ApplicationLogin info, String certificate)
       throws InSideException {
-    return AfirmaModelToWsModelConverter
-        .resultadoValidarCertificadoAfirmaToResultadoValidarCertificado(
-            afirmaService.validarCertificado(info.getIdApplicacion(), certificate, false));
+
+    try {
+      ResultadoValidarCertificado resultado = null;
+
+      resultado = eeutilOperFirmaServiceImplBusiness.validarCertificado(info.getIdApplicacion(),
+          certificate);
+
+      if (!resultado.isValidado()) {
+        validarCertificadoMDC(certificate);
+        logger.error("Certificado no valido. " + resultado.getDetalleValidacion());
+      }
+
+      return resultado;
+
+    } catch (EeutilException e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      validarCertificadoMDC(certificate);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    } catch (Exception e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      validarCertificadoMDC(certificate);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * @param certificate
+   */
+  private void validarCertificadoMDC(String certificate) {
+    try {
+      Object[] objs = new Object[1];
+      String[] strP = new String[] {"certificate"};
+      objs[0] = certificate;
+
+      Map<String, String> mParametros =
+          UtilReflection.getInstance().extractMultipleDataPermitted(null, objs, strP);
+      String resultado = MapUtil.mapToString(mParametros);
+      MDC.put(EXTRA_PARA_M, resultado);
+
+    } catch (IOException e1) {
+
+      // si falla palante
+
+    }
   }
 
   /**
    * Obtiene el resultado de la validaci?n de un certificado
    */
   @Override
+  @AuditEntryPointAnnotation(nombreApp = "EEUTIL-OPER-FIRMA")
   public InfoCertificado getInfoCertificado(ApplicationLogin info, String certificate)
       throws InSideException {
-    return AfirmaModelToWsModelConverter
-        .resultadoValidarCertificadoAfirmaToResultadoValidarCertificadoAmpliado(
-            afirmaService.validarCertificado(info.getIdApplicacion(), certificate, true));
+
+    try {
+
+      InfoCertificado infoCertificado = eeutilOperFirmaServiceImplBusiness
+          .getInfoCertificado(info.getIdApplicacion(), certificate);
+
+      if (!infoCertificado.isValidado()) {
+        getInfoCertificadoMDC(certificate);
+        logger.error("Certificado no valido. " + infoCertificado.getDetalleValidacion());
+      }
+
+      return infoCertificado;
+
+    } catch (EeutilException e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      getInfoCertificadoMDC(certificate);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    } catch (Exception e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      getInfoCertificadoMDC(certificate);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * @param certificate
+   */
+  private void getInfoCertificadoMDC(String certificate) {
+    try {
+      Object[] objs = new Object[1];
+      String[] strP = new String[] {"certificate"};
+      objs[0] = certificate;
+
+      Map<String, String> mParametros =
+          UtilReflection.getInstance().extractMultipleDataPermitted(null, objs, strP);
+      String resultado = MapUtil.mapToString(mParametros);
+      MDC.put(EXTRA_PARA_M, resultado);
+
+    } catch (IOException e1) {
+
+      // si falla palante
+
+    }
   }
 
   /**
    * Recibe una firma y una configuraci?n de ampliaci?n y devuelve la firma con el upgrade apropiado
    */
   @Override
+  @AuditEntryPointAnnotation(nombreApp = "EEUTIL-OPER-FIRMA")
   public ResultadoAmpliarFirma ampliarFirma(ApplicationLogin info, byte[] firma,
       ConfiguracionAmpliarFirma configuracion) throws InSideException {
 
-    ResultadoAmpliarFirma resultadoAmpliarFirma;
-
     try {
+      return eeutilOperFirmaServiceImplBusiness.ampliarFirma(info.getIdApplicacion(), firma,
+          configuracion);
 
-      ResultadoAmpliarFirmaAfirma resAfirma =
-          afirmaService.ampliarFirma(info.getIdApplicacion(), firma, AfirmaModelToWsModelConverter
-              .configuracionAmpliarFirmaToConfiguracionAmpliarFirmaAfirma(configuracion));
-      resultadoAmpliarFirma = AfirmaModelToWsModelConverter
-          .resultadoAmpliarFirmaAfirmaToResultadoAmpliarFirma(resAfirma);
-    } catch (AfirmaException e) {
-      logger.error("Error en ampliarFirma", e);
-      EstadoInfo estadoInfo = new EstadoInfo("ERROR", e.getCode(), e.getMessage());
-      throw new InSideException(estadoInfo.getDescripcion(), estadoInfo);
-    } catch (Throwable t) {
-      logger.error("Error en ampliarFirma", t);
-      EstadoInfo estadoInfo =
-          new EstadoInfo("ERROR", "ERROR INESPERADO AL INTENTAR AMPLIAR LA FIRMA", null);
-      throw new InSideException(estadoInfo.getDescripcion(), estadoInfo);
     }
 
-    return resultadoAmpliarFirma;
+    catch (EeutilException e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      ampliarFirmaMDC(firma, configuracion);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    } catch (Exception e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      ampliarFirmaMDC(firma, configuracion);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    }
+  }
+
+  private void ampliarFirmaMDC(byte[] firma, ConfiguracionAmpliarFirma configuracion) {
+    try {
+      Object[] objs = new Object[2];
+      String[] strP = new String[] {FIRMA_CONST, "configuracion"};
+      objs[0] = firma;
+      objs[1] = configuracion;
+
+      Map<String, String> mParametros =
+          UtilReflection.getInstance().extractMultipleDataPermitted(null, objs, strP);
+      String resultado = MapUtil.mapToString(mParametros);
+      MDC.put(EXTRA_PARA_M, resultado);
+
+    } catch (IOException e1) {
+
+      // si falla palante
+
+    }
   }
 
   @Override
+  @AuditEntryPointAnnotation(nombreApp = "EEUTIL-OPER-FIRMA")
   public byte[] postProcesarFirma(ApplicationLogin info, byte[] firma) throws InSideException {
-    byte[] firmaPost = null;
-    try {
-      PostProcessFactory factory = PostProcessFactory.getInstance();
-      PostProcessor proc = factory.getPostProcessor(AOSignerFactory.getSigner(firma));
 
-      if (proc == null) {
-        EstadoInfo estadoInfo = new EstadoInfo();
-        throw new InSideException("No existe postProcessador para este tipo de firma", estadoInfo);
+    try {
+      return eeutilOperFirmaServiceImplBusiness.postProcesarFirma(firma);
+
+    } catch (EeutilException e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      postProcesarFirmaMDC(firma);
+
+      if (e.COD_AFIRMA == null) {
+        e.COD_AFIRMA = "Error postprocesando firma";
       }
 
-      firmaPost = proc.postProcessSign(firma);
-    } catch (IOException ioe) {
-      logger.error("Error postprocesando firma", ioe);
-      EstadoInfo estadoInfo = new EstadoInfo();
-      throw new InSideException("No se puede leer la firma: " + ioe.getMessage(), estadoInfo);
-    } catch (PostProcessException pe) {
-      logger.error("Error postprocesando firma", pe);
-      EstadoInfo estadoInfo = new EstadoInfo();
-      throw new InSideException("No se puede procesar la firma: " + pe.getMessage(), estadoInfo);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
     } catch (Exception e) {
-      logger.error("Error postprocesando firma", e);
-      EstadoInfo estadoInfo = new EstadoInfo();
-      throw new InSideException("Error inesperado al procesar la firma: " + e.getMessage(),
-          estadoInfo);
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      postProcesarFirmaMDC(firma);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
     }
 
-    return firmaPost;
+  }
+
+  /**
+   * @param firma
+   */
+  private void postProcesarFirmaMDC(byte[] firma) {
+    try {
+      Object[] objs = new Object[1];
+      String[] strP = new String[] {FIRMA_CONST};
+      objs[0] = firma;
+
+      Map<String, String> mParametros =
+          UtilReflection.getInstance().extractMultipleDataPermitted(null, objs, strP);
+      String resultado = MapUtil.mapToString(mParametros);
+      MDC.put(EXTRA_PARA_M, resultado);
+
+    } catch (IOException e1) {
+
+      // si falla palante
+
+    }
   }
 
   @Override
+  @AuditEntryPointAnnotation(nombreApp = "EEUTIL-OPER-FIRMA")
   public ResultadoComprobarFirmaFormatoA comprobarFirmaFormatoA(ApplicationLogin info, byte[] firma)
       throws InSideException {
+
     try {
-      ResultadoComprobarFirmaFormatoA retorno = new ResultadoComprobarFirmaFormatoA();
+      return eeutilOperFirmaServiceImplBusiness.comprobarFirmaFormatoA(info.getIdApplicacion(),
+          firma);
 
-      // obtenemos el tipo de firma DSS
-      String tipoFirmaDss = afirmaService.obtenerTipoFirmaDss(info.getIdApplicacion(), firma, null);
+    } catch (EeutilException e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      comprobarFirmaFormatoAMDC(firma);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    }
 
-      // realizamos la conversion para validar la firma al formato
-      // correspondiente
-      String formatoValidacion =
-          AfirmaValidationConverterType.tipoFirmaAToTipoFirmaValidacion(tipoFirmaDss);
+    catch (Exception e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      comprobarFirmaFormatoAMDC(firma);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    }
+  }
 
-      // comprobamos si la firma viene en base64
-      byte[] firmaValidar = Base64.isBase64(firma) ? firma : Base64.encodeBase64(firma);
+  /**
+   * @param firma
+   */
+  private void comprobarFirmaFormatoAMDC(byte[] firma) {
+    try {
+      Object[] objs = new Object[1];
+      String[] strP = new String[] {FIRMA_CONST};
+      objs[0] = firma;
 
-      // compobamos si se tiene q hacer la ampliacion de formato
-      ResultadoValidacionFormatoAInfo resultadoValidar = AfirmaModelToWsModelConverter
-          .resultadoValidacionFirmaFormatoAAfirmaToResultadoValidacionFormatoAInfo(
-              afirmaService.validarFirmaFormatoA(info.getIdApplicacion(),
-                  XMLUtil.decodeUTF8(firmaValidar), null, null, null, formatoValidacion));
-      if (resultadoValidar.isEstado()) {
-        retorno.setEsFirmaA(true);
-        retorno.setFechaValidez(resultadoValidar.getFechaValidezCertificadoTSA());
-      } else {
-        retorno.setEsFirmaA(false);
-      }
-      return retorno;
-    } catch (AfirmaException e) {
-      logger.error("Error en comprobarFirmaFormatoA", e);
-      EstadoInfo estadoInfo = new EstadoInfo("ERROR", e.getCode(), e.getMessage());
-      throw new InSideException(estadoInfo.getDescripcion(), estadoInfo);
+      Map<String, String> mParametros =
+          UtilReflection.getInstance().extractMultipleDataPermitted(null, objs, strP);
+      String resultado = MapUtil.mapToString(mParametros);
+      MDC.put(EXTRA_PARA_M, resultado);
+
+    } catch (IOException e1) {
+
+      // si falla palante
+
     }
   }
 
   @Override
+  @AuditEntryPointAnnotation(nombreApp = "EEUTIL-OPER-FIRMA")
   public ResultadoAmpliarFirma resellarFirmaA(ApplicationLogin info, byte[] firma)
       throws InSideException {
+
     try {
-      logger.debug("Inicio resellarFirmaA");
+      return eeutilOperFirmaServiceImplBusiness.resellarFirmaA(info.getIdApplicacion(), firma);
 
-      // obtenemos el tipo de firma DSS
-      String tipoFirmaDss = afirmaService.obtenerTipoFirmaDss(info.getIdApplicacion(), firma, null);
-
-      // realizamos la conversion para validar la firma al formato
-      // correspondiente
-      String formatoAmpliar =
-          AfirmaValidationConverterType.tipoFirmaAToTipoFirmaValidacion(tipoFirmaDss);
-
-      ConfiguracionAmpliarFirma confAmpliar = new ConfiguracionAmpliarFirma();
-      confAmpliar.setCertificadosFirmantes(null);
-      confAmpliar.setFormatoAmpliacion(formatoAmpliar);
-      confAmpliar.setIgnorarPeriodoDeGracia(true);
-      return this.ampliarFirma(info, firma, confAmpliar);
-    } catch (AfirmaException e) {
-      logger.error("Error en resellarFirmaA", e);
-      EstadoInfo estadoInfo = new EstadoInfo("ERROR", e.getCode(), e.getMessage());
-      throw new InSideException(estadoInfo.getDescripcion(), estadoInfo);
+    } catch (EeutilException e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      resellarFirmaAMDC(firma);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    } catch (Exception e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      resellarFirmaAMDC(firma);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
     }
+  }
+
+  /**
+   * @param firma
+   */
+  private void resellarFirmaAMDC(byte[] firma) {
+    try {
+      Object[] objs = new Object[1];
+      String[] strP = new String[] {FIRMA_CONST};
+      objs[0] = firma;
+
+      Map<String, String> mParametros =
+          UtilReflection.getInstance().extractMultipleDataPermitted(null, objs, strP);
+      String resultado = MapUtil.mapToString(mParametros);
+      MDC.put(EXTRA_PARA_M, resultado);
+
+    } catch (IOException e1) {
+
+      // si falla palante
+
+    }
+  }
+
+  /****
+   * Servicio que se llama desde misc por soapbinding solamente Misc --> operfirma
+   */
+  @Override
+  @AuditEntryPointAnnotation(nombreApp = "EEUTIL-OPER-FIRMA")
+  public ResultadoValidacionFirmaInfo validacionFirmaInfo(ApplicationLogin info, byte[] firma,
+      String tipoFirma, DatosFirmados datosFirmados, boolean infoCertificados)
+      throws InSideException {
+
+    try {
+      return eeutilOperFirmaServiceImplBusiness.validacionFirmaInfo(info.getIdApplicacion(), firma,
+          tipoFirma, datosFirmados, infoCertificados);
+    } catch (EeutilException e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      validacionFirmaInfoMDC(firma, tipoFirma, datosFirmados, infoCertificados);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    } catch (Exception e) {
+      ingresarMDCAppUUID(info.getIdApplicacion());
+      validacionFirmaInfoMDC(firma, tipoFirma, datosFirmados, infoCertificados);
+      logger.error(e.getMessage(), e);
+      throw new InSideException(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * @param firma
+   * @param tipoFirma
+   * @param datosFirmados
+   * @param infoCertificados
+   */
+  private void validacionFirmaInfoMDC(byte[] firma, String tipoFirma, DatosFirmados datosFirmados,
+      boolean infoCertificados) {
+    try {
+      Object[] objs = new Object[4];
+      String[] strP =
+          new String[] {FIRMA_CONST, TIPO_FIRMA_CONST, DATOS_FIRMADOS_CONST, "infoCertificados"};
+      objs[0] = firma;
+      objs[1] = tipoFirma;
+      objs[2] = datosFirmados;
+      objs[3] = infoCertificados;
+
+      Map<String, String> mParametros =
+          UtilReflection.getInstance().extractMultipleDataPermitted(null, objs, strP);
+      String resultado = MapUtil.mapToString(mParametros);
+      MDC.put(EXTRA_PARA_M, resultado);
+
+    } catch (IOException e1) {
+
+      // si falla palante
+
+    }
+  }
+
+  private void ingresarMDCAppUUID(String idApp) {
+    MDC.put("idApli", idApp);
+    MDC.put("uUId", UUID.randomUUID().toString());
   }
 
 }

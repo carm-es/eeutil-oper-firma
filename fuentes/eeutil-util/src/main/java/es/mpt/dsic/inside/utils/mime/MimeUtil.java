@@ -1,35 +1,39 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.utils.mime;
 
-import java.util.Collection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import eu.medsea.mimeutil.MimeUtil2;
-import eu.medsea.mimeutil.detector.MagicMimeMimeDetector;
-import eu.medsea.util.EncodingGuesser;
+import org.apache.tika.Tika;
+import org.apache.tika.config.TikaConfig;
+import org.apache.tika.mime.MimeType;
+import org.apache.tika.mime.MimeTypeException;
+
+
 
 public class MimeUtil {
 
+  private MimeUtil() {
+
+  }
+
   protected final static Log logger = LogFactory.getLog(MimeUtil.class);
 
-  public static String DEFAULT_MIME = "application/octect-stream";
-  public static String ZIP_MIME_2 = "application/x-zip";
-  public static String ZIP_MIME_1 = "application/zip";
-  public static String WORD_EXCEL_97_MIME = "application/msword";
+  public final static String DEFAULT_MIME = "application/octet-stream";
+  public final static String ZIP_MIME_2 = "application/x-zip";
+  public final static String ZIP_MIME_1 = "application/zip";
+  public final static String WORD_EXCEL_97_MIME = "application/msword";
 
-  private static MagicMimeMimeDetector magicMimeMimeDetector;
-
-  static MimeUtil2 mimeUtil = new MimeUtil2();
+  // Falta el atributo private. Si se usa como atributo de clase porque se instancia un objeto?
 
   /**
    * Obtiene el tipo mime en base al contenido de un fichero. Si no se puede obtener con ninguna
@@ -42,55 +46,47 @@ public class MimeUtil {
   public static String getMimeNotNull(byte[] data) {
     String mimeType = getMimeType(data);
     logger.debug("Mime detectado por MIMEUTIL: " + mimeType);
-    if (ZIP_MIME_1.equalsIgnoreCase(mimeType) || ZIP_MIME_2.equalsIgnoreCase(mimeType)
-        || WORD_EXCEL_97_MIME.equalsIgnoreCase(mimeType)) {
+    if (ZIP_MIME_1.equalsIgnoreCase(mimeType) || ZIP_MIME_2
+        .equalsIgnoreCase(mimeType)/* || WORD_EXCEL_97_MIME.equalsIgnoreCase(mimeType) */) {
       mimeType = OfficeAnalizer.getMimeType(data);
       logger.debug("Mime detectado por OfficeAnalizer: " + mimeType);
     } ;
     return mimeType != null ? mimeType : DEFAULT_MIME;
   }
 
-  /**
-   * Obtiene el tipo mime en base al contenido de un fichero @param data @return null si no se
-   * detecta el mime. @throws
-   */
-  public static String getMimeType(byte[] data) {
-    String resultmime;
 
-    if (magicMimeMimeDetector == null) {
-      magicMimeMimeDetector = new MagicMimeMimeDetector();
+
+  public static String getMimeType(byte[] bytesFichero) {
+    try {
+      Tika tika = new Tika();
+      TikaConfig config = TikaConfig.getDefaultConfig();
+      MimeType mimeType = config.getMimeRepository().forName(tika.detect(bytesFichero));
+
+      return mimeType.getName();
+    } catch (MimeTypeException e) {
+      logger.error("Error al obtener el mimetype: Se devolvera null " + e.getMessage(), e);
+      return null;
     }
-    // MagicMimeMimeDetector magicMimeMimeDetector = new MagicMimeMimeDetector ();
-    resultmime = getFirstMimeType(magicMimeMimeDetector.getMimeTypes(data));
-
-    if (resultmime == null || DEFAULT_MIME.equals(resultmime)) {
-      EncodingGuesser
-          .setSupportedEncodings(EncodingGuesser.getCanonicalEncodingNamesSupportedByJVM());
-      resultmime = getFirstMimeType(mimeUtil.getMimeTypes(data));
-      String aux[] = resultmime.split(";");
-      if (aux.length > 1)
-        resultmime = aux[0];
-
-    }
-
-    return resultmime;
   }
 
 
-  /**
-   * Dada una colección de tipos mime, da el primero
-   * 
-   * @param mimeTypes
-   * @return null si su tamaño es 0.
-   * @throws RepositoryCmisException
-   */
-  private static String getFirstMimeType(Collection<?> mimeTypes) {
-    String first = null;
-    if (mimeTypes.size() >= 1) {
-      first = mimeTypes.iterator().next() + "";
+
+  public static boolean esMimeTikaPosibleFirma(String mime) {
+    if (mime != null) {
+      if ("application/pdf".equalsIgnoreCase(mime)) {
+        return true;
+      } else if ("text/xml".equalsIgnoreCase(mime) || "application/xml".equalsIgnoreCase(mime)) {
+        return true;
+      } else if ("application/octet-stream".equalsIgnoreCase(mime)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
     }
-    return first;
   }
+
 
 
 }

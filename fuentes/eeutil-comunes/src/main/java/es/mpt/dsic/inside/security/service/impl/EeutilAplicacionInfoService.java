@@ -1,22 +1,25 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.security.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.AuthenticationException;
@@ -25,6 +28,7 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import es.mpt.dsic.inside.dao.EeutilDao;
 import es.mpt.dsic.inside.model.EeutilAplicacion;
 import es.mpt.dsic.inside.model.EeutilAplicacionPlantilla;
@@ -33,6 +37,7 @@ import es.mpt.dsic.inside.security.model.AppInfo;
 import es.mpt.dsic.inside.security.model.EeutilAppInfo;
 import es.mpt.dsic.inside.security.model.EeutilUserDetails;
 import es.mpt.dsic.inside.security.service.AplicacionInfoService;
+import es.mpt.dsic.inside.utils.exception.EeutilException;
 
 @Service("aplicacionInfoService")
 public class EeutilAplicacionInfoService implements AplicacionInfoService {
@@ -46,11 +51,42 @@ public class EeutilAplicacionInfoService implements AplicacionInfoService {
       "DELETE FROM EeutilAplicacionPlantilla where id.idaplicacion = ?";
 
   @Override
-  public AppInfo getAplicacionInfo(String appId)
-      throws AuthenticationException, DataAccessException {
+  public AppInfo getAplicacionInfo(String appId) throws EeutilException {
 
+    // long inicio=new Date().getTime();
     EeutilAplicacion isApp = (EeutilAplicacion) eeutilDao.getObjeto(EeutilAplicacion.class, appId);
+    // long fin=new Date().getTime();
+
+    // logger.debug("Tiempo en milisegundos"+String.valueOf(fin-inicio));
+
+    // Para comprobar que cachea.
+    /*
+     * CacheManager.ALL_CACHE_MANAGERS.get(0).getCache("es.mpt.dsic.inside.model.EeutilAplicacion").
+     * getSize();
+     * 
+     * Set<EeutilAplicacionPropiedad> temp=isApp.getPropiedades();
+     * Iterator<EeutilAplicacionPropiedad> it=temp.iterator();
+     * 
+     * while(it.hasNext()) { EeutilAplicacionPropiedad prop=it.next();
+     * System.out.println("ID:"+prop.getId()+" "+"VALUE"+prop.getValor());
+     * 
+     * }
+     */
+
+    if (isApp == null) {
+      MDC.put("uUId", UUID.randomUUID().toString());
+      throw new EeutilException("Error de autenticacion de usuario: " + appId);
+    } else {
+      // escribimos en el hilo para tenerlo disponible en log4j.properties
+
+      MDC.put("idApli", appId);
+      MDC.put("uUId", UUID.randomUUID().toString());
+    }
+
+
     return new EeutilAppInfo(isApp);
+
+
   }
 
   @Override
@@ -63,7 +99,7 @@ public class EeutilAplicacionInfoService implements AplicacionInfoService {
         (EeutilAplicacion) eeutilDao.getObjeto(EeutilAplicacion.class, username);
 
     if (isApp == null) {
-      throw new UsernameNotFoundException("No se puede encontrar la aplicación: " + username,
+      throw new UsernameNotFoundException("No se puede encontrar la aplicacion: " + username,
           username);
     }
     Collection<GrantedAuthority> permisos = new ArrayList<GrantedAuthority>();

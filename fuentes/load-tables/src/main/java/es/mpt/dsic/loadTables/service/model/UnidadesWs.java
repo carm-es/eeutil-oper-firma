@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 
@@ -15,38 +15,40 @@ package es.mpt.dsic.loadTables.service.model;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
  * <p>
- * Java class for UnidadesWs complex type.
+ * Clase Java para UnidadesWs complex type.
  * 
  * <p>
- * The following schema fragment specifies the expected content contained within this class.
+ * El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
- * &lt;complexType name="UnidadesWs">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="usuario" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="clave" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="formatoFichero" type="{http://impl.manager.directorio.map.es/wsExport}formatoFichero"/>
- *         &lt;element name="tipoConsulta" type="{http://impl.manager.directorio.map.es/wsExport}tipoConsultaUO"/>
- *         &lt;element name="codigo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="unidadesDependientes" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="nivelAdministracion" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="nivelJerarquico" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="estados" type="{http://impl.manager.directorio.map.es/wsExport}estados" minOccurs="0"/>
- *         &lt;element name="comunidad" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="provincia" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="fechaInicio" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="fechaFin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="UnidadesWs"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="usuario" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="clave" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="formatoFichero" type="{http://impl.manager.directorio.map.es/wsExport}formatoFichero"/&gt;
+ *         &lt;element name="tipoConsulta" type="{http://impl.manager.directorio.map.es/wsExport}tipoConsultaUO"/&gt;
+ *         &lt;element name="codigo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="unidadesDependientes" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
+ *         &lt;element name="nivelAdministracion" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="nivelJerarquico" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="estados" type="{http://impl.manager.directorio.map.es/wsExport}estados" minOccurs="0"/&gt;
+ *         &lt;element name="comunidad" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="provincia" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="servicios" type="{http://impl.manager.directorio.map.es/wsExport}servicios" minOccurs="0"/&gt;
+ *         &lt;element name="fechaInicio" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="fechaFin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -55,7 +57,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "UnidadesWs",
     propOrder = {"usuario", "clave", "formatoFichero", "tipoConsulta", "codigo",
         "unidadesDependientes", "nivelAdministracion", "nivelJerarquico", "estados", "comunidad",
-        "provincia", "fechaInicio", "fechaFin"})
+        "provincia", "servicios", "fechaInicio", "fechaFin"})
 public class UnidadesWs {
 
   @XmlElement(required = true)
@@ -63,8 +65,10 @@ public class UnidadesWs {
   @XmlElement(required = true)
   protected String clave;
   @XmlElement(required = true)
+  @XmlSchemaType(name = "string")
   protected FormatoFichero formatoFichero;
   @XmlElement(required = true)
+  @XmlSchemaType(name = "string")
   protected TipoConsultaUO tipoConsulta;
   protected String codigo;
   protected Boolean unidadesDependientes;
@@ -73,11 +77,12 @@ public class UnidadesWs {
   protected Estados estados;
   protected String comunidad;
   protected String provincia;
+  protected Servicios servicios;
   protected String fechaInicio;
   protected String fechaFin;
 
   /**
-   * Gets the value of the usuario property.
+   * Obtiene el valor de la propiedad usuario.
    * 
    * @return possible object is {@link String }
    * 
@@ -87,7 +92,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the usuario property.
+   * Define el valor de la propiedad usuario.
    * 
    * @param value allowed object is {@link String }
    * 
@@ -97,7 +102,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the clave property.
+   * Obtiene el valor de la propiedad clave.
    * 
    * @return possible object is {@link String }
    * 
@@ -107,7 +112,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the clave property.
+   * Define el valor de la propiedad clave.
    * 
    * @param value allowed object is {@link String }
    * 
@@ -117,7 +122,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the formatoFichero property.
+   * Obtiene el valor de la propiedad formatoFichero.
    * 
    * @return possible object is {@link FormatoFichero }
    * 
@@ -127,7 +132,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the formatoFichero property.
+   * Define el valor de la propiedad formatoFichero.
    * 
    * @param value allowed object is {@link FormatoFichero }
    * 
@@ -137,7 +142,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the tipoConsulta property.
+   * Obtiene el valor de la propiedad tipoConsulta.
    * 
    * @return possible object is {@link TipoConsultaUO }
    * 
@@ -147,7 +152,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the tipoConsulta property.
+   * Define el valor de la propiedad tipoConsulta.
    * 
    * @param value allowed object is {@link TipoConsultaUO }
    * 
@@ -157,7 +162,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the codigo property.
+   * Obtiene el valor de la propiedad codigo.
    * 
    * @return possible object is {@link String }
    * 
@@ -167,7 +172,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the codigo property.
+   * Define el valor de la propiedad codigo.
    * 
    * @param value allowed object is {@link String }
    * 
@@ -177,7 +182,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the unidadesDependientes property.
+   * Obtiene el valor de la propiedad unidadesDependientes.
    * 
    * @return possible object is {@link Boolean }
    * 
@@ -187,7 +192,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the unidadesDependientes property.
+   * Define el valor de la propiedad unidadesDependientes.
    * 
    * @param value allowed object is {@link Boolean }
    * 
@@ -197,7 +202,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the nivelAdministracion property.
+   * Obtiene el valor de la propiedad nivelAdministracion.
    * 
    * @return possible object is {@link Integer }
    * 
@@ -207,7 +212,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the nivelAdministracion property.
+   * Define el valor de la propiedad nivelAdministracion.
    * 
    * @param value allowed object is {@link Integer }
    * 
@@ -217,7 +222,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the nivelJerarquico property.
+   * Obtiene el valor de la propiedad nivelJerarquico.
    * 
    * @return possible object is {@link Integer }
    * 
@@ -227,7 +232,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the nivelJerarquico property.
+   * Define el valor de la propiedad nivelJerarquico.
    * 
    * @param value allowed object is {@link Integer }
    * 
@@ -237,7 +242,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the estados property.
+   * Obtiene el valor de la propiedad estados.
    * 
    * @return possible object is {@link Estados }
    * 
@@ -247,7 +252,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the estados property.
+   * Define el valor de la propiedad estados.
    * 
    * @param value allowed object is {@link Estados }
    * 
@@ -257,7 +262,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the comunidad property.
+   * Obtiene el valor de la propiedad comunidad.
    * 
    * @return possible object is {@link String }
    * 
@@ -267,7 +272,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the comunidad property.
+   * Define el valor de la propiedad comunidad.
    * 
    * @param value allowed object is {@link String }
    * 
@@ -277,7 +282,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the provincia property.
+   * Obtiene el valor de la propiedad provincia.
    * 
    * @return possible object is {@link String }
    * 
@@ -287,7 +292,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the provincia property.
+   * Define el valor de la propiedad provincia.
    * 
    * @param value allowed object is {@link String }
    * 
@@ -297,7 +302,27 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the fechaInicio property.
+   * Obtiene el valor de la propiedad servicios.
+   * 
+   * @return possible object is {@link Servicios }
+   * 
+   */
+  public Servicios getServicios() {
+    return servicios;
+  }
+
+  /**
+   * Define el valor de la propiedad servicios.
+   * 
+   * @param value allowed object is {@link Servicios }
+   * 
+   */
+  public void setServicios(Servicios value) {
+    this.servicios = value;
+  }
+
+  /**
+   * Obtiene el valor de la propiedad fechaInicio.
    * 
    * @return possible object is {@link String }
    * 
@@ -307,7 +332,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the fechaInicio property.
+   * Define el valor de la propiedad fechaInicio.
    * 
    * @param value allowed object is {@link String }
    * 
@@ -317,7 +342,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Gets the value of the fechaFin property.
+   * Obtiene el valor de la propiedad fechaFin.
    * 
    * @return possible object is {@link String }
    * 
@@ -327,7 +352,7 @@ public class UnidadesWs {
   }
 
   /**
-   * Sets the value of the fechaFin property.
+   * Define el valor de la propiedad fechaFin.
    * 
    * @param value allowed object is {@link String }
    * 

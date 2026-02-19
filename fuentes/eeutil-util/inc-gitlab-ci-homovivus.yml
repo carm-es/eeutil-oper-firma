@@ -1,0 +1,191 @@
+   
+#Plantilla Local
+include:
+  - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-util'
+    ref: Integracion
+    file: '/plantilla-local-gitlab-ci-homovivus.yml'    
+
+
+environmentpost:    
+ stage: .post
+ script:
+    - echo 'Ejecucion de los triggers para los siguientes subproyectos.'
+    - printenv
+ rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'       
+
+trigger_mvn_base:
+  stage: triggers
+  trigger:
+    project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-mvn-base'
+    branch: Integracion
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+
+
+
+trigger_afirmaws_stub:
+  needs:
+    - trigger_mvn_base
+  stage: triggers
+  trigger:      
+    project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-afirmaws-stub'
+    branch: Integracion
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'        
+        
+trigger_model:
+  needs:
+    - trigger_afirmaws_stub
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-model'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml' 
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'           
+        
+trigger_services:
+  needs:
+    - trigger_model
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-services'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml' 
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'        
+        
+trigger_pdf_conversion:
+  needs:
+    - trigger_services
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-pdf-conversion'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'        
+        
+        
+trigger_pdf_conversion_igae:
+  needs:
+    - trigger_pdf_conversion
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-pdf-conversion-igae'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'        
+        
+        
+trigger_comunes:
+  needs:
+    - trigger_pdf_conversion_igae
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-comunes'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml'   
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'        
+        
+        
+trigger_load_tables:
+  needs:
+    - trigger_comunes
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/load-tables'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'            
+        
+        
+trigger_schredule:
+  needs:
+    - trigger_load_tables
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-schredule'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml'    
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'        
+        
+trigger_firma:
+  needs:
+    - trigger_schredule
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-firma'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml'   
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'        
+        
+        
+trigger_oper_firma:
+  needs:
+    - trigger_firma
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-oper-firma'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml'  
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'        
+        
+        
+trigger_util_firma:
+  needs:
+    - trigger_oper_firma
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-util-firma'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml'  
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'        
+        
+        
+trigger_vis_docexp:
+  needs:
+    - trigger_util_firma
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-vis-docexp'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml'   
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'        
+        
+        
+trigger_misc:
+  needs:
+    - trigger_vis_docexp
+  stage: triggers
+  trigger:
+    include:       
+      - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-misc'
+        ref: 'Integracion'
+        file: 'inc-gitlab-ci-homovivus.yml'   
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'                                                                                             
+
+
+
+

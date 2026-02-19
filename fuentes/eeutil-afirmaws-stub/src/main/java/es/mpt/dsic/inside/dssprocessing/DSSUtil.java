@@ -1,30 +1,29 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.dssprocessing;
 
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.security.cert.X509Certificate;
+import java.util.StringTokenizer;
+
 import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import es.mpt.dsic.inside.model.FirmaInfoAfirma;
-import es.mpt.dsic.inside.obtenerinformacionfirma.ReadableCertificateInfoAndTstContentType;
-import es.mpt.dsic.inside.util.ComparadorFechas;
-import es.mpt.dsic.inside.utils.misc.MiscUtil;
-import es.mpt.dsic.inside.util.InformacionFirmante;
+
 import afirmaws.services.dss.afirma.dss._1_0.profile.xss.schema.DataInfoType;
 import afirmaws.services.dss.afirma.dss._1_0.profile.xss.schema.ReadableCertificateInfo;
 import afirmaws.services.dss.afirma.dss._1_0.profile.xss.schema.ReadableFieldType;
@@ -37,6 +36,11 @@ import afirmaws.services.dss.oasis.names.tc.dss._1_0.profiles.verificationreport
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.profiles.verificationreport.schema.TimeStampValidityType;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.profiles.verificationreport.schema.TstContentType;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.profiles.verificationreport.schema.VerificationReportType;
+import es.mpt.dsic.inside.model.FirmaInfoAfirma;
+import es.mpt.dsic.inside.obtenerinformacionfirma.ReadableCertificateInfoAndTstContentType;
+import es.mpt.dsic.inside.util.ComparadorFechas;
+import es.mpt.dsic.inside.util.InformacionFirmante;
+import es.mpt.dsic.inside.utils.misc.MiscUtil;
 
 
 public class DSSUtil {
@@ -45,7 +49,7 @@ public class DSSUtil {
 
   /**
    * Busca en el VerificationReport de la respuesta el ReadableCertificateInfo que coincida en
-   * número de serie con el X509Certificate pasado como parámetro
+   * número de serie con el X509Certificate pasado como parametro
    * 
    * @param certificate certificado X509Certificate del que se quiere encontrar su equivalente en el
    *        VerificationReport
@@ -88,7 +92,7 @@ public class DSSUtil {
 
   /**
    * Devuelve la pareja ReadableCertificateInfo/TstContentType cuyo objeto readableCertificateInfo
-   * tenga el mismo número de serie que el X509Certificate pasado como parámetro.
+   * tenga el mismo número de serie que el X509Certificate pasado como parametro.
    * 
    * @param certificate
    * @param readableCertificateInfoAndTstContentList
@@ -135,7 +139,7 @@ public class DSSUtil {
 
 
   /**
-   * Devuelve el primer objeto de una lista que sea de una clase dada como parámetro
+   * Devuelve el primer objeto de una lista que sea de una clase dada como parametro
    * 
    * @param clase Clase del objeto que se quiere buscar
    * @param lista Lista de objetos sobre la que se quiere buscar
@@ -150,7 +154,7 @@ public class DSSUtil {
 
   /**
    * Devuelve la lista de objetos de una clase dada que se encuentre en otra lista de objetos dada
-   * como parámetro
+   * como parametro
    * 
    * @param clase Clase de los objetos que se desean buscar
    * @param lista Lista de objetos sobre la que se quiere buscar.
@@ -168,7 +172,7 @@ public class DSSUtil {
 
   /**
    * Devuelve un objeto de tipo JAXBElement<?> cuyo nombre se corresponda con el QName dado como
-   * parámetro
+   * parametro
    * 
    * @param qname QName del objeto que se quiere buscar
    * @param lista Lista de objetos sobre la que se quiere buscar
@@ -242,12 +246,12 @@ public class DSSUtil {
   }
 
   /**
-   * Mezcla la información de dos listas de firmantes.
+   * Mezcla la informacion de dos listas de firmantes.
    * 
-   * @param infoFirmantes Información de los firmantes obtenida con las librerías de afirma.
-   * @param readableCertificateInfoList Información de los certificados firmantes obtenida de la
+   * @param infoFirmantes Informacion de los firmantes obtenida con las librerias de afirma.
+   * @param readableCertificateInfoList Informacion de los certificados firmantes obtenida de la
    *        llamada a los servicios DSS de Afirma.
-   * @return Lista de firmantes con la información de ambas fuentes.
+   * @return Lista de firmantes con la informacion de ambas fuentes.
    */
   /*
    * public static List<FirmaInfo> mergeInfoFirmantes (List<InformacionFirmante> infoFirmantes,
@@ -268,7 +272,7 @@ public class DSSUtil {
    * 
    * Collections.sort(firmantes, new ComparadorFechas ());
    * 
-   * // El tipo de la firma del que firmó primero será Firma. if (firmantes != null) {
+   * // El tipo de la firma del que firmo primero sera Firma. if (firmantes != null) {
    * firmantes.get(0).setExtras((InformacionFirmante.TipoFirma.F).toString()); }
    * 
    * return firmantes;
@@ -277,12 +281,12 @@ public class DSSUtil {
    */
 
   /**
-   * Mezcla la información de dos listas de firmantes. *
+   * Mezcla la informacion de dos listas de firmantes. *
    * 
-   * @param infoFirmantes Información de los firmantes obtenida con las librerías de afirma.
-   * @param readableCertificateInfoAndTstContentList Información de los certificados firmantes
+   * @param infoFirmantes Informacion de los firmantes obtenida con las librerias de afirma.
+   * @param readableCertificateInfoAndTstContentList Informacion de los certificados firmantes
    *        obtenida de la llamada a los servicios DSS de Afirma, junto con los sellos de tiempo.
-   * @return Lista de firmantes con la información de ambas fuentes.
+   * @return Lista de firmantes con la informacion de ambas fuentes.
    */
   /*
    * public static List<FirmaInfo> mergeInfoFirmantes (List<InformacionFirmante> infoFirmantes,
@@ -307,7 +311,7 @@ public class DSSUtil {
    * 
    * Collections.sort(firmantes, new ComparadorFechas ());
    * 
-   * // El tipo de la firma del que firmó primero será Firma. if (firmantes != null) {
+   * // El tipo de la firma del que firmo primero sera Firma. if (firmantes != null) {
    * //firmantes.get(0).setExtras((InformacionFirmante.TipoFirma.F).toString());
    * firmantes.get(0).setExtras(firmantes.get(0).getExtras().replaceFirst((InformacionFirmante.
    * TipoFirma.CF).toString(), (InformacionFirmante.TipoFirma.F).toString()));
@@ -321,17 +325,17 @@ public class DSSUtil {
 
 
   /**
-   * Mezcla la información de dos listas de firmantes. *
+   * Mezcla la informacion de dos listas de firmantes. *
    * 
-   * @param infoFirmantes Información de los firmantes obtenida con las librerías de afirma.
-   * @param readableCertificateInfoAndTstContentList Información de los certificados firmantes
+   * @param infoFirmantes Informacion de los firmantes obtenida con las librerias de afirma.
+   * @param readableCertificateInfoAndTstContentList Informacion de los certificados firmantes
    *        obtenida de la llamada a los servicios DSS de Afirma, junto con los sellos de tiempo.
-   * @return Lista de firmantes con la información de ambas fuentes.
+   * @return Lista de firmantes con la informacion de ambas fuentes.
    */
   public static List<FirmaInfoAfirma> mergeInfoFirmantes(List<InformacionFirmante> infoFirmantes,
       List<ReadableCertificateInfoAndTstContentType> readableCertificateInfoAndTstContentList) {
 
-    List<FirmaInfoAfirma> firmantes = new ArrayList<FirmaInfoAfirma>();
+    List<FirmaInfoAfirma> firmantes = new ArrayList<>();
 
     for (InformacionFirmante info1 : infoFirmantes) {
 
@@ -346,15 +350,16 @@ public class DSSUtil {
       ReadableCertificateInfoAndTstContentType certTstInfo =
           getReadableCertificateInfoAndTstContentTypeCoincidente(info1.getCertificado(),
               readableCertificateInfoAndTstContentList);
-      fillFirmaInfoAfirma(firmaInfo, certTstInfo.getReadableCertificateInfo(),
-          certTstInfo.getTimeStampContent());
+      fillFirmaInfoAfirma(firmaInfo,
+          (certTstInfo != null ? certTstInfo.getReadableCertificateInfo() : null),
+          (certTstInfo != null ? certTstInfo.getTimeStampContent() : null));
 
       firmantes.add(firmaInfo);
     }
 
     Collections.sort(firmantes, new ComparadorFechas());
 
-    // El tipo de la firma del que firmó primero será Firma.
+    // El tipo de la firma del que firmo primero sera Firma.
     if (firmantes != null) {
       // firmantes.get(0).setExtras((InformacionFirmante.TipoFirma.F).toString());
       firmantes.get(0)
@@ -373,15 +378,15 @@ public class DSSUtil {
    * Rellena algunos campos de un objeto FirmaInfo
    * 
    * @param firmaInfo objeto del que se quieren rellenar algunos campos.
-   * @param certInfo Objeto devuelto en la petición al servico DSS de afirma.
+   * @param certInfo Objeto devuelto en la peticion al servico DSS de afirma.
    */
   /*
    * public static void fillFirmaInfo (FirmaInfo firmaInfo, final ReadableCertificateInfo certInfo)
    * { String nifResponsable = null; String NIFCIF = null; String nombreResponsable = null; String
    * razonSocial = null;
    * 
-   * // apellido1 y apellido2 son required, así que les ponemos valor cadena vacía, por si no
-   * estuvieran en la información del certificado firmante. firmaInfo.setApellido1("");
+   * // apellido1 y apellido2 son required, asi que les ponemos valor cadena vacia, por si no
+   * estuvieran en la informacion del certificado firmante. firmaInfo.setApellido1("");
    * firmaInfo.setApellido2("");
    * 
    * List<ReadableFieldType> fields = certInfo.getReadableField();
@@ -429,7 +434,7 @@ public class DSSUtil {
    * Rellena algunos campos de un objeto FirmaInfo
    * 
    * @param firmaInfo objeto del que se quieren rellenar algunos campos.
-   * @param certInfo Objeto devuelto en la petición al servico DSS de afirma.
+   * @param certInfo Objeto devuelto en la peticion al servico DSS de afirma.
    */
   /*
    * public static void fillFirmaInfo (FirmaInfo firmaInfo, final ReadableCertificateInfo certInfo,
@@ -437,8 +442,8 @@ public class DSSUtil {
    * NIFEntidadSuscriptora = null; String entidadSuscriptora = null; String nombreResponsable =
    * null; String razonSocial = null;
    * 
-   * // apellido1 y apellido2 son required, así que les ponemos valor cadena vacía, por si no
-   * estuvieran en la información del certificado firmante. firmaInfo.setApellido1("");
+   * // apellido1 y apellido2 son required, asi que les ponemos valor cadena vacia, por si no
+   * estuvieran en la informacion del certificado firmante. firmaInfo.setApellido1("");
    * firmaInfo.setApellido2("");
    * 
    * List<ReadableFieldType> fields = certInfo.getReadableField();
@@ -491,7 +496,7 @@ public class DSSUtil {
    * (entidadSuscriptora != null && !entidadSuscriptora.contentEquals("")){
    * firmaInfo.setNombre(entidadSuscriptora); } else { firmaInfo.setNombre(""); }
    * 
-   * // Información del timestamp if (tstContent != null) { if (tstContent.getCreationTime() !=
+   * // Informacion del timestamp if (tstContent != null) { if (tstContent.getCreationTime() !=
    * null) { XMLGregorianCalendar greg = tstContent.getCreationTime();
    * firmaInfo.setExtras(firmaInfo.getExtras() + " - (Sello de Tiempo: " +
    * MiscUtil.dateToString(greg.toGregorianCalendar().getTime(), "dd/MM/yyyy HH:mm") + ")"); }
@@ -505,7 +510,7 @@ public class DSSUtil {
    * Rellena algunos campos de un objeto FirmaInfo
    * 
    * @param firmaInfo objeto del que se quieren rellenar algunos campos.
-   * @param certInfo Objeto devuelto en la petición al servico DSS de afirma.
+   * @param certInfo Objeto devuelto en la peticion al servico DSS de afirma.
    */
   public static void fillFirmaInfoAfirma(FirmaInfoAfirma firmaInfo,
       final ReadableCertificateInfo certInfo, final TstContentType tstContent) {
@@ -515,14 +520,15 @@ public class DSSUtil {
     String entidadSuscriptora = null;
     String nombreResponsable = null;
     String razonSocial = null;
+    String cnSubject = null;
 
     // Se suma este campo por la posibilidad de firma con certificado seudonimo
     String seudonimo = null;
 
     String apellidos = null;
 
-    // apellido1 y apellido2 son required, así que les ponemos valor cadena vacía, por si no
-    // estuvieran en la información del certificado firmante.
+    // apellido1 y apellido2 son required, asi que les ponemos valor cadena vacia, por si no
+    // estuvieran en la informacion del certificado firmante.
     firmaInfo.setApellido1("");
     firmaInfo.setApellido2("");
 
@@ -584,6 +590,20 @@ public class DSSUtil {
 
       else if (field.getFieldIdentity().equals("ApellidosResponsable")) {
         apellidos = field.getFieldValue();
+      } else if (field.getFieldIdentity().equals("subject")) {
+        logger.debug("subject:" + field.getFieldValue());
+        String subject = field.getFieldValue();
+        StringTokenizer strToken = new StringTokenizer(subject, ",");
+
+        while (strToken.hasMoreElements()) {
+          String strAux = (String) strToken.nextElement();
+          if (strAux.contains("CN=")) {
+            // cojemos el contenido del CN.
+            cnSubject = strAux.substring(strAux.indexOf("CN=") + ("CN=".length()), strAux.length());
+            break;
+          }
+
+        }
       }
 
     } // end for
@@ -608,6 +628,8 @@ public class DSSUtil {
       firmaInfo.setNombre(nombreResponsable);
     } else if (razonSocial != null && !razonSocial.contentEquals("")) {
       firmaInfo.setNombre(razonSocial);
+    } else if (cnSubject != null && !cnSubject.contentEquals("")) {
+      firmaInfo.setNombre(cnSubject);
     } else if (entidadSuscriptora != null && !entidadSuscriptora.contentEquals("")) {
       firmaInfo.setNombre(entidadSuscriptora);
     } else {
@@ -639,7 +661,7 @@ public class DSSUtil {
   }
 
   /**
-   * Obtiene la lista de ReadableCertificateInfo de una respuesta DSS de verificación de firma.
+   * Obtiene la lista de ReadableCertificateInfo de una respuesta DSS de verificacion de firma.
    * 
    * @param verifyResponse
    * @return
@@ -669,7 +691,7 @@ public class DSSUtil {
 
   /**
    * Obtiene la lista de ReadableCertificateInfo y de TstContent de una respuesta DSS de
-   * verificación de firma.
+   * verificacion de firma.
    * 
    * @param verifyResponse
    * @return
@@ -683,29 +705,29 @@ public class DSSUtil {
     // Obtenemos el VerificationReport del OptionalOutputs
     List<Object> optionalOutputs = verifyResponse.getOptionalOutputs().getAny();
 
-    VerificationReportType vrt = (VerificationReportType) DSSUtil
-        .getObjectByClass(VerificationReportType.class, optionalOutputs);
+    VerificationReportType vrt =
+        DSSUtil.getObjectByClass(VerificationReportType.class, optionalOutputs);
 
-    List<IndividualSignatureReportType> indReportList = vrt.getIndividualSignatureReport();
+    List<IndividualSignatureReportType> indReportList =
+        (vrt != null ? vrt.getIndividualSignatureReport() : null);
 
     for (IndividualSignatureReportType report : indReportList) {
       ReadableCertificateInfoAndTstContentType certInfoAndTst =
           new ReadableCertificateInfoAndTstContentType();
-      // Añadiremos el elemento si encontramos info del certificado o del timestamp
+      // Anadiremos el elemento si encontramos info del certificado o del timestamp
       boolean add = false;
 
       // Buscamos info del certificado
       List<Object> details = report.getDetails().getAny();
-      ReadableCertificateInfo certInfo = (ReadableCertificateInfo) DSSUtil
-          .getObjectByClass(ReadableCertificateInfo.class, details);
+      ReadableCertificateInfo certInfo =
+          DSSUtil.getObjectByClass(ReadableCertificateInfo.class, details);
       if (certInfo != null) {
         certInfoAndTst.setReadableCertificateInfo(certInfo);
         add = true;
       }
 
       // Info del sello de tiempo
-      DetailedReportType dtr =
-          (DetailedReportType) DSSUtil.getObjectByClass(DetailedReportType.class, details);
+      DetailedReportType dtr = DSSUtil.getObjectByClass(DetailedReportType.class, details);
       TstContentType tstContent = getTimeStampContent(dtr);
       if (tstContent != null) {
         certInfoAndTst.setTimeStampContent(tstContent);
@@ -734,7 +756,9 @@ public class DSSUtil {
     JAXBElement<?> jaxbElement = getJAXBElementByQName(
         new QName("urn:oasis:names:tc:dss:1.0:core:schema", "SignatureType"), optionalOutputs);
 
-    return jaxbElement.getValue().toString();
+    return (jaxbElement != null && jaxbElement.getValue() != null
+        ? jaxbElement.getValue().toString()
+        : null);
   }
 
   /**
@@ -866,14 +890,15 @@ public class DSSUtil {
     StringBuffer sb = new StringBuffer("");
     sb.append(" ResultMajor: " + result.getResultMajor());
     sb.append(" ResultMinor: " + result.getResultMinor());
-    sb.append(" Descripcion: " + result.getResultMessage().getValue());
+    sb.append(" Descripcion: "
+        + (result.getResultMessage() != null ? result.getResultMessage().getValue() : ""));
     return sb.toString();
   }
 
 
 
   /**
-   * Devuelve una expresión xpath válida, a partir de una devuelta por el servicio de Afirma.
+   * Devuelve una expresion xpath valida, a partir de una devuelta por el servicio de Afirma.
    * 
    * @param xpathExpression
    * @return

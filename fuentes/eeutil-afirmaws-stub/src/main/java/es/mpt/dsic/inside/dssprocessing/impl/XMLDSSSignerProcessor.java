@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.dssprocessing.impl;
@@ -14,9 +14,11 @@ package es.mpt.dsic.inside.dssprocessing.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.CharacterCodingException;
+
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactoryConfigurationException;
+
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.AnyType;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.DocumentType;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.InputDocuments;
@@ -57,7 +59,7 @@ public abstract class XMLDSSSignerProcessor extends DSSSignerProcessor {
 
     ReturnUpdatedSignature returnUpdatedSignature = of_oasis_core.createReturnUpdatedSignature();
 
-    // Se genera el nodo en base a la ampliaci�n solicitada
+    // Se genera el nodo en base a la ampliacion solicitada
     if (AfirmaConstantes.UPGRADE_TIMESTAMP.equals(upgradeFormat)) {
       returnUpdatedSignature.setType(DSSTiposFirmaConstantes.DSS_SIGNATURE_MODE_T);
     } else {
@@ -92,7 +94,7 @@ public abstract class XMLDSSSignerProcessor extends DSSSignerProcessor {
    * SignedDataInfo signedDataInfo = (SignedDataInfo) DSSUtil.getObjectByClass(SignedDataInfo.class,
    * verifyResponse.getOptionalOutputs().getAny());
    * 
-   * // Obtengo los objetos SignedDataRefType para buscar información sobre el contenido firmado. if
+   * // Obtengo los objetos SignedDataRefType para buscar informacion sobre el contenido firmado. if
    * (signedDataInfo != null) { contenidoFirmado = new ContenidoFirmado ();
    * 
    * 
@@ -110,7 +112,7 @@ public abstract class XMLDSSSignerProcessor extends DSSSignerProcessor {
    * if (signedDataRefConEncoding == null) { throw new ContentNotExtractedException
    * ("No se ha encontrado ningun nodo SignedDataRef que contenga el elemento Encoding"); }
    * 
-   * // Obtenemos la expresión xpath del nodo que tiene el contenido firmado. String xpathExpr =
+   * // Obtenemos la expresion xpath del nodo que tiene el contenido firmado. String xpathExpr =
    * DSSUtil.expresionXpathValida(signedDataRefConEncoding.getXPath());
    * 
    * 
@@ -118,7 +120,7 @@ public abstract class XMLDSSSignerProcessor extends DSSSignerProcessor {
    * //Node nodoContenido = null; try { // Obtenemos la estructura DOM del XML de la firma Document
    * doc = XMLUtil.getDOMDocument(sign, false);
    * 
-   * contenidoFirmado = new ContenidoFirmado(); // Si la expresión xpath es "//*" se trata de una
+   * contenidoFirmado = new ContenidoFirmado(); // Si la expresion xpath es "//*" se trata de una
    * firma XAdES Enveloped if (xpathExpr.contentEquals("//*")) { contenidoFirmado =
    * getContenidoFirmadoEnveloped(doc); // Si no, se trata de XAdES detached } else {
    * contenidoFirmado = getContenidoFirmadoDetached(doc, xpathExpr,
@@ -165,7 +167,7 @@ public abstract class XMLDSSSignerProcessor extends DSSSignerProcessor {
    */
 
   /**
-   * Para obtener el contenido firmado obtenemos el contenido del nodo que cumpla la expresión
+   * Para obtener el contenido firmado obtenemos el contenido del nodo que cumpla la expresion
    * XPATH. Si es XML, formamos un nuevo XML (con la cabecera), y si no, obtenemos los bytes y su
    * mime.
    * 

@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.pdf.converter;
@@ -14,36 +14,40 @@ package es.mpt.dsic.inside.pdf.converter;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfWriter;
+
+import com.lowagie.text.Document;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.PdfWriter;
+
 import es.mpt.dsic.inside.pdf.PdfUtils;
-import es.mpt.dsic.inside.pdf.exception.PdfConversionException;
+import es.mpt.dsic.inside.utils.exception.EeutilException;
 import es.mpt.dsic.inside.utils.file.FileUtil;
 import es.mpt.dsic.inside.utils.io.IOUtil;
 
 @Component
 public class GenericPdfConverter {
 
-  private static final String GENERIC_PREFIX = "generic";
+  protected static final Log logger = LogFactory.getLog(GenericPdfConverter.class);
 
-  public File convertPdfGeneric(File inputFile, boolean isPictureFile)
-      throws PdfConversionException, IOException {
+  public static final String GENERIC_PREFIX = "generic";
+
+  public File convertPdfGeneric(File inputFile, boolean isPictureFile) throws EeutilException {
     Document pdfDocument = new Document();
-    FileOutputStream fos = null;
     PdfWriter writer = null;
-    String filePath = null;
+    String filePath = FileUtil.createFilePath(GENERIC_PREFIX);
+    FileOutputStream fos = null;
     try {
-      filePath = FileUtil.createFilePath(GENERIC_PREFIX);
+
       fos = new FileOutputStream(filePath);
-
-
       writer = PdfWriter.getInstance(pdfDocument, fos);
+      writer.setPdfVersion(PdfWriter.PDF_VERSION_1_7);
       writer.open();
       pdfDocument.open();
       /**
@@ -64,6 +68,7 @@ public class GenericPdfConverter {
           pdfDocument = new Document();
         }
         writer = PdfWriter.getInstance(pdfDocument, fos);
+        writer.setPdfVersion(PdfWriter.PDF_VERSION_1_7);
         writer.open();
         pdfDocument.open();
         pdfDocument.add(img);
@@ -72,13 +77,29 @@ public class GenericPdfConverter {
       else {
         pdfDocument.add(new Paragraph(new String(IOUtil.getBytesFromObject(inputFile))));
       }
-    } catch (Throwable t) {
-      throw new PdfConversionException("Error convertPdfGeneric", t);
+    } catch (EeutilException t) {
+      // logger.error("Error en convertPdfGeneric. Nombre de fichero"+inputFile.getName()+" "+
+      // t.getMessage(), t);
+      throw new EeutilException(
+          "Error convertPdfGeneric Nombre de fichero" + inputFile.getName() + " " + t.getMessage(),
+          t);
+    } catch (Exception t) {
+      // logger.error("Error en convertPdfGeneric. Nombre de fichero"+inputFile.getName()+" "+
+      // t.getMessage(), t);
+      throw new EeutilException(
+          "Error convertPdfGeneric Nombre de fichero" + inputFile.getName() + " " + t.getMessage(),
+          t);
     } finally {
       PdfUtils.close(pdfDocument);
       PdfUtils.close(writer);
-      FileUtil.close(fos);
+      try {
+        FileUtil.close(fos);
+      } catch (EeutilException e) {
+        throw new EeutilException(e.getMessage(), e);
+
+      }
     }
+
     return new File(filePath);
   }
 

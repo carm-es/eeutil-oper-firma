@@ -1,20 +1,23 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.dssprocessing.impl;
+
+import java.nio.charset.StandardCharsets;
 
 import org.springframework.security.crypto.codec.Base64;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.AnyType;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.DocumentType;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.InputDocuments;
@@ -22,9 +25,11 @@ import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.ResponseBaseTyp
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.ReturnUpdatedSignature;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.SignatureObject;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.SignaturePtr;
+import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.UpdatedSignatureType;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.VerifyRequest;
 import es.mpt.dsic.inside.afirma.ws.client.AfirmaConstantes;
 import es.mpt.dsic.inside.dssprocessing.DSSSignerProcessor;
+import es.mpt.dsic.inside.dssprocessing.DSSUtil;
 import es.mpt.dsic.inside.dssprocessing.constantes.DSSTiposFirmaConstantes;
 import es.mpt.dsic.inside.obtenerinformacionfirma.ContenidoFirmado;
 import es.mpt.dsic.inside.obtenerinformacionfirma.ContentNotExtractedException;
@@ -93,21 +98,23 @@ public class XMLEnvelopingDSSSignerProcessor extends DSSSignerProcessor {
 
 
       org.w3c.dom.Node nodoObjet = XMLUtil.getNodeByXpathExpression(doc, xpathExpression);
-      String nodoObjectString = XMLUtil.getStringFromNode(nodoObjet, doc.getInputEncoding());
 
-      String xpathExpressionFichero = "//*[local-name()='Object']";
-      String fichero = XMLUtil.getvalorNodoDatosXML(nodoObjectString, xpathExpressionFichero);
-
-      // si viene en base64 hay que decodificarlo porque lo van a codificar mas adelante
-      byte[] decodificado = null;
-      if (Base64.isBase64(fichero.getBytes()))
-        decodificado = Base64.decode(fichero.getBytes());
-      else
-        decodificado = fichero.getBytes();
-
-      contenidoFirmado.setBytesDocumento(decodificado);
+      // obtenemos el valor del nodo ds:Object
+      String contenido = nodoObjet.getFirstChild().getNodeValue();
 
 
+      byte[] bytesDocumento = null;
+
+      // si el contenido original es un chorro bytes los decodificamos
+      if (XMLUtil.isStrBase64(contenido)) {
+        bytesDocumento = Base64.decode(contenido.getBytes());
+      } else {
+        bytesDocumento =
+            XMLUtil.getBytesFromNode(nodoObjet.getFirstChild(), StandardCharsets.UTF_8.toString())
+                .toByteArray();
+      }
+
+      contenidoFirmado.setBytesDocumento(bytesDocumento);
 
       NamedNodeMap atributos = nodoObjet.getAttributes();
       int i = 0;
@@ -146,6 +153,9 @@ public class XMLEnvelopingDSSSignerProcessor extends DSSSignerProcessor {
     if (AfirmaConstantes.UPGRADE_TIMESTAMP.equals(upgradeFormat)) {
       returnUpdatedSignature.setType(DSSTiposFirmaConstantes.DSS_SIGNATURE_MODE_T);
     } // Aqu� se ir�n a�adiendo las diferentes posibilidades de ampliaci�n de firmas
+    else {
+      returnUpdatedSignature.setType(upgradeFormat);
+    }
 
     at.getAny().add(returnUpdatedSignature);
   }
@@ -153,8 +163,11 @@ public class XMLEnvelopingDSSSignerProcessor extends DSSSignerProcessor {
 
   @Override
   public byte[] getUpgradedSignature(ResponseBaseType verifyResponse) {
-    // TODO Auto-generated method stub
-    return null;
+    // Se obtiene el nodo UpdatedSignatureType //
+    UpdatedSignatureType updatedSignatureType = (UpdatedSignatureType) DSSUtil
+        .getObjectByClass(UpdatedSignatureType.class, verifyResponse.getOptionalOutputs().getAny());
+
+    return updatedSignatureType.getSignatureObject().getBase64Signature().getValue();
   }
 
 

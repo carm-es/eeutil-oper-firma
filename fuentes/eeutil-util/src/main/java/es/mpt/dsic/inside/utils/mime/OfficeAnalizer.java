@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 /*
@@ -22,15 +22,17 @@ package es.mpt.dsic.inside.utils.mime;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
+
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,11 +41,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import es.mpt.dsic.inside.utils.file.FileUtil;
 
-
-
-/** Clase para el an&aacute;lisis de ficheros OOXML, ODF y Microsoft Office 97/2003. */
+/**
+ * Clase para el an&aacute;lisis de ficheros OOXML, ODF y Microsoft Office 97/2003.
+ */
 public final class OfficeAnalizer {
 
   protected final static Log logger = LogFactory.getLog(OfficeAnalizer.class);
@@ -54,7 +57,8 @@ public final class OfficeAnalizer {
 
   private static final String ZIP_MIMETYPE = "application/zip"; //$NON-NLS-1$
 
-  // private static final Logger LOGGER = Logger.getLogger("es.gob.afirma"); //$NON-NLS-1$
+  // private static final Logger LOGGER = Logger.getLogger("es.gob.afirma");
+  // //$NON-NLS-1$
 
   /** MimeTypes reconocidos del formato OOXML. */
   private static final Set<String> OOXML_MIMETYPES = new HashSet<String>(17);
@@ -134,7 +138,7 @@ public final class OfficeAnalizer {
    */
   static String getMimeType(final byte[] data) {
 
-    final String testString = new String(data);
+    final String testString = new String(data, StandardCharsets.UTF_8);
 
     if (testString.contains("Microsoft Excel")) { //$NON-NLS-1$
       return "application/vnd.ms-excel"; //$NON-NLS-1$
@@ -152,10 +156,9 @@ public final class OfficeAnalizer {
       return "application/vnd.visio"; //$NON-NLS-1$
     }
 
-    final ZipFile zipFile;
+    ZipFile zipFile = null;
 
     // final ZipInputStream zIs;
-
 
     try {
       zipFile = FileUtil.createTempZipFile(data);
@@ -165,10 +168,16 @@ public final class OfficeAnalizer {
       logger.debug("El fichero indicado no es un ZIP"); //$NON-NLS-1$
       return null;
     } catch (final IOException e1) {
-      logger.error("No se pudo leer el fichero ", e1); //$NON-NLS-1$
+      logger.error("No se pudo leer el fichero " + e1.getMessage(), e1); //$NON-NLS-1$
       return null;
     } catch (final Exception e) {
-      logger.debug("Error leyendo el fichero, se considerará que es un ZIP", e);
+      logger.debug("Error leyendo el fichero, se considerara que es un ZIP", e);
+      try {
+        if (zipFile != null)
+          zipFile.close();
+      } catch (IOException e1) {
+        logger.error(e.getMessage(), e);
+      }
       return ZIP_MIMETYPE;
     }
 
@@ -178,7 +187,6 @@ public final class OfficeAnalizer {
       String tempMimetype = null;
 
       ZipEntry entradaZip = zipFile.getEntry("mimetype");
-
 
       if (isODFFile(zipFile)) {
         tempMimetype = getODFMimeType(zipFile.getInputStream(zipFile.getEntry("mimetype"))); //$NON-NLS-1$
@@ -195,6 +203,14 @@ public final class OfficeAnalizer {
 
     } catch (final Exception e) {
       // Se ignora, es porque no es ni ODF ni OOXML
+    } finally {
+      if (zipFile != null) {
+        try {
+          zipFile.close();
+        } catch (IOException e) {
+          logger.error("Error al cerrar el descriptor de fichero zipFile");
+        }
+      }
     }
 
     return mimetype;
@@ -225,12 +241,19 @@ public final class OfficeAnalizer {
    *         contrario.
    */
   public static boolean isOOXMLDocument(final byte[] document) {
-    final ZipFile zipFile;
+    ZipFile zipFile = null;
     try {
       zipFile = FileUtil.createTempZipFile(document);
     } catch (final Exception e1) {
       logger.debug("No se pudo leer el fichero, se considerara que no es un documento OOXML"); //$NON-NLS-1$
       return false;
+    } finally {
+      if (zipFile != null)
+        try {
+          zipFile.close();
+        } catch (IOException e) {
+          logger.error(e.getMessage(), e);
+        }
     }
     return isOOXMLFile(zipFile);
   }
@@ -261,7 +284,12 @@ public final class OfficeAnalizer {
 
     final Document doc;
     try {
-      doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(contentTypeIs);
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+      dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+      // XMLSeguridadFactoria.setPreventAttackDocumentBuilderFactoryExternalStatic(dbf);
+
+      doc = dbf.newDocumentBuilder().parse(contentTypeIs);
     } catch (final Exception e) {
       return null;
     }
@@ -308,12 +336,19 @@ public final class OfficeAnalizer {
    *         contrario.
    */
   public static boolean isODFDocument(final byte[] document) {
-    final ZipFile zipFile;
+    ZipFile zipFile = null;
     try {
       zipFile = FileUtil.createTempZipFile(document);
     } catch (final Exception e1) {
       logger.debug("No se pudo leer el fichero, se considerara que no es un documento ODF"); //$NON-NLS-1$
       return false;
+    } finally {
+      if (zipFile != null)
+        try {
+          zipFile.close();
+        } catch (IOException e) {
+          logger.error(e.getMessage(), e);
+        }
     }
     return isODFFile(zipFile);
   }
@@ -335,8 +370,6 @@ public final class OfficeAnalizer {
         && zipFile.getEntry("META-INF/manifest.xml") != null; //$NON-NLS-1$
   }
 
-
-
   /**
    * Recupera la extensi&oacute;n apropiada para un documento ODF. Si el fichero no era un documento
    * ODF soportado, se devolver&aacute; <code>null</code>.
@@ -348,7 +381,7 @@ public final class OfficeAnalizer {
     final String contentTypeData;
     try {
       // contentTypeData = new String(Util.getBytes(contentTypeIs));
-      contentTypeData = new String(IOUtils.toByteArray(contentTypeIs));
+      contentTypeData = new String(IOUtils.toByteArray(contentTypeIs), StandardCharsets.UTF_8);
     } catch (final Exception e) {
       return null;
     }
@@ -357,7 +390,5 @@ public final class OfficeAnalizer {
     }
     return null;
   }
-
-
 
 }

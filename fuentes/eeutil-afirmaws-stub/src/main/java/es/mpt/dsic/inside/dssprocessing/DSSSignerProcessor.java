@@ -1,33 +1,40 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.dssprocessing;
 
 
 import java.util.ArrayList;
+
 import javax.xml.bind.JAXBElement;
-import es.mpt.dsic.inside.model.ConfiguracionAmpliarFirmaAfirma;
-import es.mpt.dsic.inside.obtenerinformacionfirma.ContenidoFirmado;
-import es.mpt.dsic.inside.obtenerinformacionfirma.ContentNotExtractedException;
+
+import afirmaws.services.dss.afirma.dss._1_0.profile.xss.schema.AdditionalReportOption;
+import afirmaws.services.dss.afirma.dss._1_0.profile.xss.schema.IncludeProperties;
+import afirmaws.services.dss.afirma.dss._1_0.profile.xss.schema.IncludePropertyType;
 import afirmaws.services.dss.minhap.MyObjectFactory;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.AnyType;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.ClaimedIdentity;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.ResponseBaseType;
+import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.VerifyRequest;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.profiles.verificationreport.schema.ReportOptionsType;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.profiles.verificationreport.schema.ReturnVerificationReport;
-import afirmaws.services.dss.afirma.dss._1_0.profile.xss.schema.AdditionalReportOption;
-import afirmaws.services.dss.afirma.dss._1_0.profile.xss.schema.IncludeProperties;
-import afirmaws.services.dss.afirma.dss._1_0.profile.xss.schema.IncludePropertyType;
-import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.VerifyRequest;
+import es.mpt.dsic.inside.model.ConfiguracionAmpliarFirmaAfirma;
+import es.mpt.dsic.inside.obtenerinformacionfirma.ContenidoFirmado;
+import es.mpt.dsic.inside.obtenerinformacionfirma.ContentNotExtractedException;
 
+/**
+ * 
+ * @author miguel.moral
+ *
+ */
 public abstract class DSSSignerProcessor {
 
   protected static afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.ObjectFactory of_oasis_core =
@@ -41,7 +48,7 @@ public abstract class DSSSignerProcessor {
   protected static MyObjectFactory my_of_afirma_profile = new MyObjectFactory();
 
   /**
-   * M�todo abstracto que rellena el nodo "SignatureObject" de la petici�n para realizar
+   * Metodo abstracto que rellena el nodo "SignatureObject" de la peticion para realizar
    * validaciones de firma
    * 
    * @param vf Objeto VerifyRequest
@@ -51,17 +58,17 @@ public abstract class DSSSignerProcessor {
       final byte[] content);
 
   /**
-   * M�todo abstracto que crea el nodo "ReturnUpdatedSignature" para las peticiones de ampliaci�n de
+   * Metodo abstracto que crea el nodo "ReturnUpdatedSignature" para las peticiones de ampliacion de
    * firma
    * 
    * @param at Objeto AnyType
    * @param sign Firma
-   * @param upgradeFormat Formato al que se ampl�a
+   * @param upgradeFormat Formato al que se amplia
    */
   public abstract void fillReturnUpdatedSignature(AnyType at, final String upgradeFormat);
 
   /**
-   * M�todo abstracto que permite obtener el contenido firmado
+   * Metodo abstracto que permite obtener el contenido firmado
    * 
    * @param verifyResponse Objeto VerifyResponse de respuesta
    * @param sign Firma
@@ -72,7 +79,7 @@ public abstract class DSSSignerProcessor {
       throws ContentNotExtractedException;
 
   /**
-   * M�todo abstracto que permite obtener la firma ampliada de un petici�n de upgrade de firma
+   * Metodo abstracto que permite obtener la firma ampliada de un peticion de upgrade de firma
    * 
    * @param verifyResponse Objeto VerifyResponse de respuesta del servicio
    * @return Firma ampliada
@@ -80,11 +87,11 @@ public abstract class DSSSignerProcessor {
   public abstract byte[] getUpgradedSignature(ResponseBaseType verifyResponse);
 
   /**
-   * M�todo que construye la petici�n para realizar una validaci�n de firma
+   * Metodo que construye la peticion para realizar una validacion de firma
    * 
    * @param sign Firma que se va a validar
-   * @param idAplicacion Identificador de aplicaci�n
-   * @return Objeto que define la petici�n del servicio
+   * @param idAplicacion Identificador de aplicacion
+   * @return Objeto que define la peticion del servicio
    */
   public VerifyRequest buildVerifyRequest(byte sign[], String idAplicacion, byte[] content) {
     VerifyRequest vf = of_oasis_core.createVerifyRequest();
@@ -95,12 +102,12 @@ public abstract class DSSSignerProcessor {
   }
 
   /**
-   * M�todo que construye la petici�n para realizar una amplicaci�n de firma
+   * Metodo que construye la peticien para realizar una amplicacion de firma
    * 
-   * @param idAplicacion Identificador de aplicaci�n
+   * @param idAplicacion Identificador de aplicacion
    * @param sign Firma que se va ampliar
-   * @param upgradeFormat Formato de firma al que se ampl�a
-   * @return Objeto que define la petici�n del servicio
+   * @param upgradeFormat Formato de firma al que se amplia
+   * @return Objeto que define la peticion del servicio
    */
   public VerifyRequest buildVerifyRequestToUpgrade(String idAplicacion, byte sign[],
       ConfiguracionAmpliarFirmaAfirma configuracion, byte[] content) {
@@ -124,10 +131,10 @@ public abstract class DSSSignerProcessor {
   }
 
   /**
-   * M�todo que rellena los capos opcionales de la petici�n de validaci�n de firma
+   * Metodo que rellena los capos opcionales de la peticion de validacion de firma
    * 
-   * @param idAplicacion Identificador de aplicaci�n
-   * @return Par�metros opcionales
+   * @param idAplicacion Identificador de aplicacion
+   * @return Parametros opcionales
    */
   public static AnyType buildOptionalInputs(String idAplicacion) {
     AnyType oi = of_oasis_core.createAnyType();
@@ -181,10 +188,10 @@ public abstract class DSSSignerProcessor {
   }
 
   /**
-   * M�todo que rellena los capos opcionales de la petici�n de ampliaci�n de firma
+   * Metodo que rellena los capos opcionales de la peticion de ampliacion de firma
    * 
-   * @param idAplicacion Identificador de aplicaci�n
-   * @return Par�metros opcionales
+   * @param idAplicacion Identificador de aplicacion
+   * @return Parametros opcionales
    */
   public static AnyType buildOptionalInputsToUpgrade(String idAplicacion,
       ArrayList<byte[]> targetSignersCerts, boolean ignoreGracePeriod) {
@@ -198,7 +205,7 @@ public abstract class DSSSignerProcessor {
     // ----------------------- End Claimed Identity ------------------------------ //
 
     // ------------------------------- Target Signers ------------------------------- //
-    // Si no se indican certificados de firmantes se aplica la ampliaci�n para todos //
+    // Si no se indican certificados de firmantes se aplica la ampliacion para todos //
     if (targetSignersCerts != null) {
       for (byte[] cert : targetSignersCerts) {
         JAXBElement<byte[]> targetSigner = of_afirma_profile.createTargetSigner(cert);

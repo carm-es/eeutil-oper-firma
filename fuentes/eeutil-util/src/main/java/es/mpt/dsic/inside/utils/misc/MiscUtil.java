@@ -1,16 +1,17 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.utils.misc;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -19,12 +20,16 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
+
+import es.mpt.dsic.inside.utils.exception.EeutilException;
 
 // import org.bouncycastle.util.encoders.Base64;
 
@@ -40,7 +45,7 @@ public class MiscUtil {
    */
   public static String getOrganizationIssuerX500Principal(String issuer) {
     int index = issuer.indexOf("O=");
-    int index2 = issuer.indexOf(",", index);
+    int index2 = issuer.indexOf(',', index);
     if ((index < index2)) {
       return issuer.substring(index + 2, index2);
     } else {
@@ -101,19 +106,24 @@ public class MiscUtil {
    * @return
    * @throws CharacterCodingException
    */
-  public static byte[] decodeByEncoding(String original, String encoding)
-      throws CharacterCodingException {
+  public static byte[] decodeByEncoding(String original, String encoding) throws EeutilException {
     byte[] decod = null;
-    String encodingLowerCase = StringUtils.isNotBlank(encoding) ? encoding.toLowerCase() : "";
-    if (encodingLowerCase.contains("base64")) {
-      decod = Base64.decodeBase64(original.getBytes());
-    } else {
-      Charset charset = Charset.forName(encodingLowerCase);
-      CharsetEncoder encoder = charset.newEncoder();
-      CharBuffer cbSalida = CharBuffer.wrap(original.toCharArray());
-      ByteBuffer bbSalida = encoder.encode(cbSalida);
-      decod = bbSalida.array();
+    try {
+      String encodingLowerCase = StringUtils.isNotBlank(encoding) ? encoding.toLowerCase() : "";
+      if (encodingLowerCase.contains("base64")) {
+        decod = Base64.decodeBase64(original.getBytes());
+      } else {
+        Charset charset = Charset.forName(encodingLowerCase);
+        CharsetEncoder encoder = charset.newEncoder();
+        CharBuffer cbSalida = CharBuffer.wrap(original.toCharArray());
+        ByteBuffer bbSalida = encoder.encode(cbSalida);
+        decod = bbSalida.array();
+      }
+
+    } catch (CharacterCodingException e) {
+      throw new EeutilException(e.getMessage(), e);
     }
+
     return decod;
   }
 
@@ -128,7 +138,7 @@ public class MiscUtil {
   /**
    * Metodo que valida la huella y el argoritmo huella de un fichero.
    * 
-   * Utilizado para la validaci�n del SIP recibido en el servicio SipBusinessService.
+   * Utilizado para la validacion del SIP recibido en el servicio SipBusinessService.
    * 
    * @param algoritm String
    * @param file File
@@ -136,15 +146,26 @@ public class MiscUtil {
    * @return boolean
    * @throws UtilException
    */
-  public static String generateHash(String algoritm, InputStream is) throws Exception {
-    MessageDigest digest = MessageDigest.getInstance(algoritm);
-    byte[] buffer = new byte[8192];
-    int read = 0;
-    while ((read = is.read(buffer)) > 0) {
-      digest.update(buffer, 0, read);
+  public static String generateHash(String algoritm, InputStream is) throws EeutilException {
+    MessageDigest digest;
+    BigInteger bigInt = null;
+    try {
+      digest = MessageDigest.getInstance(algoritm);
+
+      byte[] buffer = new byte[8192];
+      int read = 0;
+      while ((read = is.read(buffer)) > 0) {
+        digest.update(buffer, 0, read);
+      }
+      byte[] md5sum = digest.digest();
+      bigInt = new BigInteger(1, md5sum);
+
+    } catch (NoSuchAlgorithmException e) {
+      throw new EeutilException(e.getMessage(), e);
+    } catch (IOException e) {
+      throw new EeutilException(e.getMessage(), e);
     }
-    byte[] md5sum = digest.digest();
-    BigInteger bigInt = new BigInteger(1, md5sum);
+
     return bigInt.toString(16);
   }
 

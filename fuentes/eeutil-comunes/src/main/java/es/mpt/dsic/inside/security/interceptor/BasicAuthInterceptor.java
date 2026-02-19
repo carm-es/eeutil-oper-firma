@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 /**
@@ -31,6 +31,8 @@ import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+
 import org.apache.cxf.configuration.security.AuthorizationPolicy;
 import org.apache.cxf.endpoint.Endpoint;
 import org.apache.cxf.message.Exchange;
@@ -38,7 +40,6 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.transport.Conduit;
-import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -49,6 +50,8 @@ import org.springframework.security.core.AuthenticationException;
 // - http://markmail.org/message/ej7mm5ynvcnukcbk
 public class BasicAuthInterceptor extends AbstractPhaseInterceptor<Message> {
   private AuthenticationManager authenticationManager;
+
+  Logger logger = Logger.getLogger(BasicAuthInterceptor.class.getName());
 
   public BasicAuthInterceptor() {
     super(Phase.RECEIVE);
@@ -83,7 +86,7 @@ public class BasicAuthInterceptor extends AbstractPhaseInterceptor<Message> {
         close(outMessage);
       } catch (IOException ioe) {
         // REVISIT log etc...
-        ioe.printStackTrace();
+        logger.severe(ioe.getMessage());
       }
     }
   }
@@ -111,8 +114,8 @@ public class BasicAuthInterceptor extends AbstractPhaseInterceptor<Message> {
 
   private Conduit getConduit(Message inMessage) throws IOException {
     Exchange exchange = inMessage.getExchange();
-    EndpointReferenceType target = exchange.get(EndpointReferenceType.class);
-    Conduit conduit = exchange.getDestination().getBackChannel(inMessage, null, target);
+    // EndpointReferenceType target = exchange.get(EndpointReferenceType.class);
+    Conduit conduit = exchange.getDestination().getBackChannel(inMessage);
     exchange.setConduit(conduit);
     return conduit;
   }

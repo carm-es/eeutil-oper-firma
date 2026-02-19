@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.loadTables.objects;
@@ -14,6 +14,8 @@ package es.mpt.dsic.loadTables.objects;
 import es.mpt.dsic.loadTables.objects.unitarios.ObjetoSimple;
 
 public class DatosDependencia {
+  private static final String CODIGO = "codigo";
+  private static final String DESCRIPCION = "descripcion";
   private ObjetoSimple unidadSuperiorJerarquica;
   private ObjetoSimple unidadOrganicaRaiz;
   private ObjetoSimple unidadRaizEntidadDerechoPublico;
@@ -54,7 +56,7 @@ public class DatosDependencia {
 
   public void setUnidadSuperiorJerarquicaCodigo(String codigo) {
     if (this.unidadSuperiorJerarquica == null) {
-      this.unidadSuperiorJerarquica = new ObjetoSimple(new String[] {"codigo", codigo});
+      this.unidadSuperiorJerarquica = new ObjetoSimple(new String[] {CODIGO, codigo});
     } else {
       this.unidadSuperiorJerarquica.setCodigo(codigo);
     }
@@ -62,7 +64,7 @@ public class DatosDependencia {
 
   public void setUnidadSuperiorJerarquicaDescripcion(String descripcion) {
     if (this.unidadSuperiorJerarquica == null) {
-      this.unidadSuperiorJerarquica = new ObjetoSimple(new String[] {"descripcion", descripcion});
+      this.unidadSuperiorJerarquica = new ObjetoSimple(new String[] {DESCRIPCION, descripcion});
     } else {
       this.unidadSuperiorJerarquica.setDescripcion(descripcion);
     }
@@ -70,7 +72,7 @@ public class DatosDependencia {
 
   public void setUnidadRaizEntidadDerechoPublicoCodigo(String codigo) {
     if (this.unidadRaizEntidadDerechoPublico == null) {
-      this.unidadRaizEntidadDerechoPublico = new ObjetoSimple(new String[] {"codigo", codigo});
+      this.unidadRaizEntidadDerechoPublico = new ObjetoSimple(new String[] {CODIGO, codigo});
     } else {
       this.unidadRaizEntidadDerechoPublico.setCodigo(codigo);
     }
@@ -79,7 +81,7 @@ public class DatosDependencia {
   public void setUnidadRaizEntidadDerechoPublicoDescripcion(String descripcion) {
     if (this.unidadRaizEntidadDerechoPublico == null) {
       this.unidadRaizEntidadDerechoPublico =
-          new ObjetoSimple(new String[] {"descripcion", descripcion});
+          new ObjetoSimple(new String[] {DESCRIPCION, descripcion});
     } else {
       this.unidadRaizEntidadDerechoPublico.setDescripcion(descripcion);
     }
@@ -87,7 +89,7 @@ public class DatosDependencia {
 
   public void setUnidadOrganicaRaizCodigo(String codigo) {
     if (this.unidadOrganicaRaiz == null) {
-      this.unidadOrganicaRaiz = new ObjetoSimple(new String[] {"codigo", codigo});
+      this.unidadOrganicaRaiz = new ObjetoSimple(new String[] {CODIGO, codigo});
     } else {
       this.unidadOrganicaRaiz.setCodigo(codigo);
     }
@@ -95,7 +97,7 @@ public class DatosDependencia {
 
   public void setUnidadOrganicaRaizDescripcion(String descripcion) {
     if (this.unidadOrganicaRaiz == null) {
-      this.unidadOrganicaRaiz = new ObjetoSimple(new String[] {"descripcion", descripcion});
+      this.unidadOrganicaRaiz = new ObjetoSimple(new String[] {DESCRIPCION, descripcion});
     } else {
       this.unidadOrganicaRaiz.setDescripcion(descripcion);
     }

@@ -1,17 +1,35 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.security.util;
 
 public final class ConstantsClave {
+
+
+  public static final String CONFIG_PATH_VAR = "eeutil-misc.config.path";
+
+
+  public static final String PROPERTY_URL_CLAVE = "clave.service.url";
+  // public static final String PROPERTY_EXCLUDED_IDPLIST = "clave.service.excludedIdPList";
+  public static final String PROPERTY_FORCED_IDP = "clave.service.forcedIdP";
+  public static final String PROPERTY_IDENTIFICADOR = "attribute1.name";
+  // public static final String ATRIBUTO_EXCLUDED_IDPLIST = "excludedIdPList";
+  public static final String ATRIBUTO_FORCED_IDP = "forcedIdP";
+  public static final String ATRIBUTO_SAML_REQUEST = "SAMLRequest";
+  public static final String ATRIBUTO_SAML_RESPONSE = "SAMLResponse";
+  public static final String ATRIBUTO_RELAY_STATE = "RelayState";
+
+  private ConstantsClave() {
+
+  }
 
   public static final String SP_PROPERTIES = "clave.properties";
 
@@ -33,7 +51,7 @@ public final class ConstantsClave {
 
   public static final String LEGAL_ATTRIBUTE_NUMBER = "legalAttribute.number";
 
-  public static final String SP_CONF = "SP";
+  public static final String SP_CONF = "SPNoMetadata";
 
   public static final String COUNTRY_URL_NUMBER = "country.url.number";
 
@@ -43,14 +61,23 @@ public final class ConstantsClave {
 
   public static final String LOGOUT_CPEPS_URL = "cpeps.logout.url";
 
-  // Constantes para el uso de clave
-  public static final String PROPERTY_URL_CLAVE = "clave.service.url";
-  public static final String PROPERTY_EXCLUDED_IDPLIST = "clave.service.excludedIdPList";
-  public static final String PROPERTY_FORCED_IDP = "clave.service.forcedIdP";
-  public static final String PROPERTY_IDENTIFICADOR = "attribute1.name";
-  public static final String ATRIBUTO_EXCLUDED_IDPLIST = "excludedIdPList";
-  public static final String ATRIBUTO_FORCED_IDP = "forcedIdP";
-  public static final String ATRIBUTO_SAML_REQUEST = "SAMLRequest";
-  public static final String ATRIBUTO_SAML_RESPONSE = "SAMLResponse";
+  public final static String SCOPE_AFIRMA = "AFIRMA";
+
+  public final static String SCOPE_STORK = "STORK";
+
+  public final static String SCOPE_SS = "SEGSOC";
+
+  public final static String SCOPE_AEAT = "PIN24H";
+
+  // public static final String PROPERTY_URL_CLAVE = "clave.service.url";
+  public final static String SERVICE_URL = "clave.service.url";
+
+  public final static String EXCLUDE_AFIRMA = "clave.service.excluded.aFirma";
+
+  public final static String EXCLUDE_UE = "clave.service.excluded.UE";
+
+  public final static String EXCLUDE_SS = "clave.service.excluded.SS";
+
+  public final static String EXCLUDE_AEAT = "clave.service.excluded.AEAT";
 
 }

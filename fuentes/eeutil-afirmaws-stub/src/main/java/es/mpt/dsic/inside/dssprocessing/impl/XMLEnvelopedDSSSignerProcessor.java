@@ -1,19 +1,21 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.dssprocessing.impl;
 
-import java.util.List;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
 import afirmaws.services.dss.afirma.dss._1_0.profile.xss.schema.SignedDataInfo;
 import afirmaws.services.dss.afirma.dss._1_0.profile.xss.schema.SignedDataRefType;
 import afirmaws.services.dss.oasis.names.tc.dss._1_0.core.schema.ResponseBaseType;
@@ -26,6 +28,8 @@ import es.mpt.dsic.inside.utils.xml.XMLUtil;
 
 
 public class XMLEnvelopedDSSSignerProcessor extends XMLDSSSignerProcessor {
+
+  protected static final Log logger = LogFactory.getLog(XMLEnvelopedDSSSignerProcessor.class);
 
   @Override
   public ContenidoFirmado getSignedData(ResponseBaseType verifyResponse, byte[] sign)
@@ -151,6 +155,9 @@ public class XMLEnvelopedDSSSignerProcessor extends XMLDSSSignerProcessor {
       encoding = XMLUtil.getEncoding(nodoContenido);
     }
     if (encoding == null) {
+      logger.warn(
+          "No se ha podido obtener el Encoding ni del nodo contenido ni del nodo signedDataRef, asignamos el encoding del documento"
+              + encod);
       encoding = encod;
     }
     return encoding;

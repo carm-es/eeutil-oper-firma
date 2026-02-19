@@ -1,0 +1,6 @@
+-------------------------------------
+ Version 4.3 - Fecha: 28/09/2017
+-------------------------------------
+	- #407 - Cambiar la librería tcn de la IGAE (24)
+		- IMPORTANTE: Se cambia la dependencia de eeutil-pdf-conversion-igae a eeutil-pdf-conversion. Tras la última
+		actualización ya no es necesario tener un jar ad-hoc para la IGAE.  

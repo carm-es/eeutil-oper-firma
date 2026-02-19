@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.util;
@@ -22,7 +22,7 @@ public class CodigosError {
 
   public static String COD_0002 = "COD_0002";
   public static String MSJ_0002 =
-      "El procesamiento de firmas XMLDSig Enveloping no está implementado";
+      "El procesamiento de firmas XMLDSig Enveloping no esta implementado";
 
   public static String COD_0003 = "COD_0003";
   public static String MSJ_0003 =
@@ -33,15 +33,15 @@ public class CodigosError {
 
   public static String COD_0005 = "COD_0005";
   public static String MSJ_0005 =
-      "El servicio DSS de Afirma no ha podido realizar la siguiente operaci�n de ampliaci�n de firma: ";
+      "El servicio DSS de Afirma no ha podido realizar la siguiente operacion de ampliacion de firma: ";
 
   public static String COD_0006 = "COD_0006";
   public static String MSJ_0006 =
-      "El servicio DSS de Afirma no reconoce el formato de firma al que se desea ampliar para la operaci�n: ";
+      "El servicio DSS de Afirma no reconoce el formato de firma al que se desea ampliar para la operacion: ";
 
   public static String COD_0007 = "COD_0007";
   public static String MSJ_0007 =
-      "El servicio DSS de Afirma no encuentra el formato de firma al que se desea ampliar para la operaci�n: ";
+      "El servicio DSS de Afirma no encuentra el formato de firma al que se desea ampliar para la operacion: ";
 
   public static String COD_0008 = "COD_0008";
   public static String MSJ_0008 = "No se puede incrustar sello de tiempo a las firmas PADES";

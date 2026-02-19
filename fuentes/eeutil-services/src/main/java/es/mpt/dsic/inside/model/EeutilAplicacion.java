@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.model;
@@ -14,15 +14,21 @@ package es.mpt.dsic.inside.model;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 @Entity
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "inside_aplicaciones")
 public class EeutilAplicacion implements Serializable {
   /**
@@ -48,12 +54,14 @@ public class EeutilAplicacion implements Serializable {
   private String responsable;
   private String unidad;
 
-
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "id.idaplicacion", fetch = FetchType.EAGER)
-  private Set<EeutilAplicacionPropiedad> propiedades = new HashSet<EeutilAplicacionPropiedad>();
+  private Set<EeutilAplicacionPropiedad> propiedades = new HashSet<>();
 
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "id.idaplicacion", fetch = FetchType.EAGER)
-  private Set<EeutilAplicacionPlantilla> plantillas = new HashSet<EeutilAplicacionPlantilla>();
+  private Set<EeutilAplicacionPlantilla> plantillas = new HashSet<>();
+
 
   public Set<EeutilAplicacionPropiedad> getPropiedades() {
     return propiedades;

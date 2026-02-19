@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.loadTables.utils;
@@ -43,12 +43,20 @@ public class Constantes {
   public static final String ETIQUETA_CODIGO_AMB_TERRITORIAL = "tns:codAmbTerritorial";
   public static final String ETIQUETA_CODIGO_AMB_ENT_GEOGRAFICA = "tns:codAmbEntGeografica";
 
+  // nuevas etiquetass DIR3-unidadesOrganicas v3
+  public static final String ETIQUETA_VERSION = "tns:version";
+  public static final String ETIQUETA_UNIDAD_SUPERIOR_VERSION = "tns:vUnidadSuperior";
+  public static final String ETIQUETA_UNIDAD_RAIZ_VERSION = "tns:vUnidadRaiz";
+  public static final String ETIQUETA_FECHA_ULTIMA_ACTUALIZACION = "tns:fechaUltimaActualizacion";
+  public static final String ETIQUETA_PODER = "tns:poder";
+
   public static String VALOR_SI = "S";
   public static String VALOR_NO = "N";
   public static String FORMATO_FECHA = "yyyy-MM-dd";
 
   public static String WS_FORMATO_FECHA = "dd/MM/yyyy";
 
+  public static String FORMATO_FECHAHORA_ACT = "yyyy-MM-dd HH:mm:ss";
 
 
   // etiquetas OFICINA
@@ -65,5 +73,12 @@ public class Constantes {
   public static final String ETIQUETA_ESTADO_OFICINA = "tns:estado";
   public static final String ETIQUETA_FECHA_ALTA_OFICINA = "tns:fechaAltaOficial";
 
+  // nuevas etiquetass DIR3-oficinas v3
+  public static final String ETIQUETA_VERSION_UNIDAD_ORGANICA_RESPONSABLE = "tns:vUOResponsable";
+  public static final String ETIQUETA_CODIGO_FUENTE_EXTERNA = "tns:codFuenteExterna";
+  public static final String ETIQUETA_HORARIO_ATENCION = "tns:horarioAtencion";
+  // definida ya en Unidades Organicas
+  // public static final String ETIQUETA_FECHA_ULTIMA_ACTUALIZACION =
+  // "tns:fechaUltimaActualizacion";
 
 }

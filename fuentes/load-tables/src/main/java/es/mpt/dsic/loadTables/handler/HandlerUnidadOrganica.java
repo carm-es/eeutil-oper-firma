@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.loadTables.handler;
@@ -15,12 +15,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.apache.log4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import es.mpt.dsic.inside.utils.xmlsecurity.XMLSeguridadFactoria;
 import es.mpt.dsic.loadTables.exception.UnidadOrganicaException;
 import es.mpt.dsic.loadTables.objects.DatosDependencia;
 import es.mpt.dsic.loadTables.objects.DatosIdentificativos;
@@ -40,9 +44,15 @@ public class HandlerUnidadOrganica extends DefaultHandler {
   private StringBuilder value;
 
   public HandlerUnidadOrganica(String file) throws UnidadOrganicaException {
-    SAXParserFactory factory = SAXParserFactory.newInstance();
-    SAXParser parser;
+
     try {
+      SAXParserFactory factory = SAXParserFactory.newInstance();
+      // factory.setFeature(XMLSeguridadFactoria.SAX_FEATURES_EXTERNAL_GENERAL_ENTITIES, false);
+      // factory.setFeature(XMLSeguridadFactoria.SAX_FEATURES_EXTERNAL_PARAMETER_ENTITIES, false);
+      XMLSeguridadFactoria.getInstance().setPreventAttackExternalSaxParserFactoryStatic(factory);
+
+
+      SAXParser parser;
       organimos = new ArrayList<Organismo>();
       parser = factory.newSAXParser();
       parser.parse(file, this);
@@ -132,6 +142,29 @@ public class HandlerUnidadOrganica extends DefaultHandler {
         if (qName.equals(Constantes.ETIQUETA_CODIGO_AMB_ENT_GEOGRAFICA)) {
           organismo.setCodAmbEntGeografica(value.toString());
         }
+        // nuevas etiquetas v3
+        if (qName.equals(Constantes.ETIQUETA_VERSION)) {
+          datosIdentificativos.setVersion(value.toString());
+        }
+        if (qName.equals(Constantes.ETIQUETA_UNIDAD_SUPERIOR_VERSION)) {
+          datosIdentificativos.setvUOSuperiorOResponsable(value.toString());
+        }
+        if (qName.equals(Constantes.ETIQUETA_UNIDAD_RAIZ_VERSION)) {
+          datosIdentificativos.setVersionUnidadRaiz(value.toString());
+        }
+        if (qName.equals(Constantes.ETIQUETA_FECHA_ULTIMA_ACTUALIZACION)) {
+
+          try {
+            SimpleDateFormat tmpFormat = new SimpleDateFormat(Constantes.FORMATO_FECHAHORA_ACT);
+            datosVigencia.setFechaUltimaActualizacion(tmpFormat.parse(value.toString()));
+          } catch (ParseException e) {
+            // nothing
+          }
+        }
+        if (qName.equals(Constantes.ETIQUETA_PODER)) {
+          datosIdentificativos.setPoder(value.toString());
+        }
+
       }
     } catch (ParseException e) {
       logger.error("Error al parsear xml: " + e.getMessage());

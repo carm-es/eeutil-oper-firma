@@ -1,23 +1,29 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.security.wss4j;
 
+import java.util.UUID;
+
 import javax.xml.ws.WebServiceContext;
-import org.apache.ws.security.WSUsernameTokenPrincipal;
+
+import org.apache.log4j.MDC;
+import org.apache.wss4j.common.principal.WSUsernameTokenPrincipalImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import es.mpt.dsic.inside.security.model.AppInfo;
 import es.mpt.dsic.inside.security.model.ApplicationLogin;
 import es.mpt.dsic.inside.security.service.AplicacionInfoService;
+import es.mpt.dsic.inside.utils.exception.EeutilException;
 
 @Component
 public class CredentialUtil {
@@ -28,11 +34,22 @@ public class CredentialUtil {
   public ApplicationLogin getCredentialEeutilUserToken(WebServiceContext jaxwsContext) {
     ApplicationLogin retorno = new ApplicationLogin();
 
-    WSUsernameTokenPrincipal userToken = (WSUsernameTokenPrincipal) jaxwsContext.getUserPrincipal();
-    AppInfo appEeutil = aplicacionInfoService.getAplicacionInfo(userToken.getName());
+    WSUsernameTokenPrincipalImpl userToken =
+        (WSUsernameTokenPrincipalImpl) jaxwsContext.getUserPrincipal();
+    AppInfo appEeutil = null;
+    try {
+      appEeutil = aplicacionInfoService.getAplicacionInfo(userToken.getName());
+    } catch (EeutilException e) {
 
-    retorno.setIdApplicacion(appEeutil.getIdaplicacion());
+    }
+
+    retorno.setIdApplicacion(appEeutil != null ? appEeutil.getIdaplicacion() : null);
     retorno.setPassword(userToken.getPassword());
+
+    // escribimos en el hilo para tenerlo disponible en log4j.properties
+
+    MDC.put("idApli", appEeutil != null ? appEeutil.getIdaplicacion() : null);
+    MDC.put("uUId", UUID.randomUUID().toString());
 
     return retorno;
   }

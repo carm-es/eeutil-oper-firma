@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.loadTables.model;
@@ -14,6 +14,7 @@ package es.mpt.dsic.loadTables.model;
 // Generated 20-may-2014 13:45:55 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+
 import es.mpt.dsic.loadTables.utils.Utils;
 
 /**
@@ -59,30 +61,58 @@ public class UnidadOrganica extends Entidad {
   private Date fechaAnulacion;
   private Date fechaExtincion;
 
+  // nuevos datos v3 y v4
+
+  // UnidadesOrganicas
+  private String version;
+  private String vUnidadRaiz;
+  private String poder;
+  // Oficinas
+  private String horarioAtencion;
+
+  // comun
+  private String vUnidadSuperiorOResponsable;
+  private Date fechaUltimaActualizacion;
+
+
   public UnidadOrganica() {}
 
-  public UnidadOrganica(String codigoUnidadOrganica, String nombreUnidadOrganica,
-      byte nivelAdministracion, String entidadDerechoPublico, String codigoUnidadSuperior,
-      String nombreUnidadSuperior, String codigoUnidadRaiz, String nombreUnidadRaiz,
-      byte nivelJerarquico, String estado) {
-    this.codigoUnidadOrganica = codigoUnidadOrganica;
-    this.nombreUnidadOrganica = nombreUnidadOrganica;
-    this.nivelAdministracion = nivelAdministracion;
-    this.entidadDerechoPublico = entidadDerechoPublico;
-    this.codigoUnidadSuperior = codigoUnidadSuperior;
-    this.nombreUnidadSuperior = nombreUnidadSuperior;
-    this.codigoUnidadRaiz = codigoUnidadRaiz;
-    this.nombreUnidadRaiz = nombreUnidadRaiz;
-    this.nivelJerarquico = nivelJerarquico;
-    this.estado = estado;
-  }
+  /*
+   * public UnidadOrganica(String codigoUnidadOrganica, String nombreUnidadOrganica, byte
+   * nivelAdministracion, String entidadDerechoPublico, String codigoUnidadSuperior, String
+   * nombreUnidadSuperior, String codigoUnidadRaiz, String nombreUnidadRaiz, byte nivelJerarquico,
+   * String estado) { this.codigoUnidadOrganica = codigoUnidadOrganica; this.nombreUnidadOrganica =
+   * nombreUnidadOrganica; this.nivelAdministracion = nivelAdministracion;
+   * this.entidadDerechoPublico = entidadDerechoPublico; this.codigoUnidadSuperior =
+   * codigoUnidadSuperior; this.nombreUnidadSuperior = nombreUnidadSuperior; this.codigoUnidadRaiz =
+   * codigoUnidadRaiz; this.nombreUnidadRaiz = nombreUnidadRaiz; this.nivelJerarquico =
+   * nivelJerarquico; this.estado = estado; }
+   * 
+   * public UnidadOrganica(String codigoUnidadOrganica, String nombreUnidadOrganica, byte
+   * nivelAdministracion, String entidadDerechoPublico, String codigoExterno, String
+   * codigoUnidadSuperior, String nombreUnidadSuperior, String codigoUnidadRaiz, String
+   * nombreUnidadRaiz, String codigoRaizDerechoPublico, String nombreRaizDerechoPublico, byte
+   * nivelJerarquico, String estado, Date fechaAlta, Date fechaBaja, Date fechaAnulacion, Date
+   * fechaExtincion) { this.codigoUnidadOrganica = codigoUnidadOrganica; this.nombreUnidadOrganica =
+   * nombreUnidadOrganica; this.nivelAdministracion = nivelAdministracion;
+   * this.entidadDerechoPublico = entidadDerechoPublico; this.codigoExterno = codigoExterno;
+   * this.codigoUnidadSuperior = codigoUnidadSuperior; this.nombreUnidadSuperior =
+   * nombreUnidadSuperior; this.codigoUnidadRaiz = codigoUnidadRaiz; this.nombreUnidadRaiz =
+   * nombreUnidadRaiz; this.codigoRaizDerechoPublico = codigoRaizDerechoPublico;
+   * this.nombreRaizDerechoPublico = nombreRaizDerechoPublico; this.nivelJerarquico =
+   * nivelJerarquico; this.estado = estado; this.fechaAlta = fechaAlta; this.fechaBaja = fechaBaja;
+   * this.fechaAnulacion = fechaAnulacion; this.fechaExtincion = fechaExtincion; }
+   */
 
-  public UnidadOrganica(String codigoUnidadOrganica, String nombreUnidadOrganica,
+  public UnidadOrganica(Date timestamp, String codigoUnidadOrganica, String nombreUnidadOrganica,
       byte nivelAdministracion, String entidadDerechoPublico, String codigoExterno,
       String codigoUnidadSuperior, String nombreUnidadSuperior, String codigoUnidadRaiz,
       String nombreUnidadRaiz, String codigoRaizDerechoPublico, String nombreRaizDerechoPublico,
       byte nivelJerarquico, String estado, Date fechaAlta, Date fechaBaja, Date fechaAnulacion,
-      Date fechaExtincion) {
+      Date fechaExtincion, String version, String vUnidadRaiz, String horarioAtencion,
+      String vUnidadSuperiorOResponsable, Date fechaUltimaActualizacion, String poder) {
+    super();
+    this.timestamp = timestamp;
     this.codigoUnidadOrganica = codigoUnidadOrganica;
     this.nombreUnidadOrganica = nombreUnidadOrganica;
     this.nivelAdministracion = nivelAdministracion;
@@ -100,12 +130,19 @@ public class UnidadOrganica extends Entidad {
     this.fechaBaja = fechaBaja;
     this.fechaAnulacion = fechaAnulacion;
     this.fechaExtincion = fechaExtincion;
+    this.version = version;
+    this.vUnidadRaiz = vUnidadRaiz;
+    this.horarioAtencion = horarioAtencion;
+    this.vUnidadSuperiorOResponsable = vUnidadSuperiorOResponsable;
+    this.fechaUltimaActualizacion = fechaUltimaActualizacion;
+    this.poder = poder;
   }
+
 
   @Id
   @TableGenerator(name = "GeneradorPk_UnidadOrganica", table = "GeneradorClaves",
       pkColumnName = "GenName", valueColumnName = "GenValue", pkColumnValue = "GEN_UnidadOrganica",
-      allocationSize = 1)
+      allocationSize = 20)
   @GeneratedValue(strategy = GenerationType.TABLE, generator = "GeneradorPk_UnidadOrganica")
   @Column(name = "id", unique = true, nullable = false)
   public Integer getId() {
@@ -283,9 +320,66 @@ public class UnidadOrganica extends Entidad {
     this.fechaExtincion = fechaExtincion;
   }
 
+
+  @Column(name = "Version", nullable = true)
+  public String getVersion() {
+    return version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
+  }
+
+  @Column(name = "Version_URaiz", nullable = true)
+  public String getvUnidadRaiz() {
+    return vUnidadRaiz;
+  }
+
+  public void setvUnidadRaiz(String vUnidadRaiz) {
+    this.vUnidadRaiz = vUnidadRaiz;
+  }
+
+  @Column(name = "Horario_Atenc", nullable = true)
+  public String getHorarioAtencion() {
+    return horarioAtencion;
+  }
+
+  public void setHorarioAtencion(String horarioAtencion) {
+    this.horarioAtencion = horarioAtencion;
+  }
+
+  @Column(name = "Ver_Un_SupORes", nullable = true)
+  public String getvUnidadSuperiorOResponsable() {
+    return vUnidadSuperiorOResponsable;
+  }
+
+  public void setvUnidadSuperiorOResponsable(String vUnidadSuperiorOResponsable) {
+    this.vUnidadSuperiorOResponsable = vUnidadSuperiorOResponsable;
+  }
+
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "Fecha_Ult_Act", length = 19)
+  public Date getFechaUltimaActualizacion() {
+    return fechaUltimaActualizacion;
+  }
+
+  public void setFechaUltimaActualizacion(Date fechaUltimaActualizacion) {
+    this.fechaUltimaActualizacion = fechaUltimaActualizacion;
+  }
+
+
+  @Column(name = "Poder", nullable = true)
+  public String getPoder() {
+    return poder;
+  }
+
+  public void setPoder(String poder) {
+    this.poder = poder;
+  }
+
   @Override
   public String toString() {
-    StringBuffer tmpBuff = new StringBuffer("Entity UnidadOrganica=[");
+    StringBuilder tmpBuff = new StringBuilder("Entity UnidadOrganica=[");
     String coma = ", ";
     tmpBuff.append("id=");
     tmpBuff.append(id);
@@ -320,6 +414,23 @@ public class UnidadOrganica extends Entidad {
     tmpBuff.append("estado=");
     tmpBuff.append(estado);
     tmpBuff.append(coma);
+    // version 3 y 4
+    tmpBuff.append("Version=");
+    tmpBuff.append(version);
+    tmpBuff.append(coma);
+    tmpBuff.append("Version_URaiz=");
+    tmpBuff.append(vUnidadRaiz);
+    tmpBuff.append(coma);
+    tmpBuff.append("horarioAtencion=");
+    tmpBuff.append(horarioAtencion);
+    tmpBuff.append(coma);
+    tmpBuff.append("vUnidadSuperiorOResponsable=");
+    tmpBuff.append(vUnidadSuperiorOResponsable);
+    tmpBuff.append(coma);
+    tmpBuff.append("Poder=");
+    tmpBuff.append(poder);
+    tmpBuff.append(coma);
+    // fin version 3 y 4
     tmpBuff.append("fechaAlta=");
     tmpBuff.append(Utils.dateToStringISO8601(fechaAlta));
     tmpBuff.append(coma);
@@ -331,6 +442,11 @@ public class UnidadOrganica extends Entidad {
     tmpBuff.append(coma);
     tmpBuff.append("fechaExtincion=");
     tmpBuff.append(Utils.dateToStringISO8601(fechaExtincion));
+    tmpBuff.append(coma);
+    // version 3 y 4
+    tmpBuff.append("fechaUltimaActualizacion=");
+    tmpBuff.append(Utils.dateToStringISO8601(fechaUltimaActualizacion));
+    // fin version 3 y 4
     tmpBuff.append("]");
     return tmpBuff.toString();
   }
