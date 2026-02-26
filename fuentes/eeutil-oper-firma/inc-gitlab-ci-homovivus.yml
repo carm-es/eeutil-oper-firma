@@ -1,0 +1,5 @@
+#Plantilla Local
+include:
+  - project: 'gestdoc/JAVA/eeutils-j2-0080/eeutil-util'
+    ref: Integracion
+    file: '/plantilla-local-gitlab-ci-homovivus.yml' 

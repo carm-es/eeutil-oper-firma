@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.converter;
@@ -21,8 +21,10 @@ import es.mpt.dsic.inside.model.InformacionFirmaAfirma;
 import es.mpt.dsic.inside.model.ResultadoAmpliarFirmaAfirma;
 import es.mpt.dsic.inside.model.ResultadoValidacionFirmaFormatoAAfirma;
 import es.mpt.dsic.inside.model.ResultadoValidacionInfoAfirma;
+import es.mpt.dsic.inside.model.ResultadoValidacionInfoAfirmaExt;
 import es.mpt.dsic.inside.model.ResultadoValidarCertificadoAfirma;
 import es.mpt.dsic.inside.model.TipoDeFirmaAfirma;
+import es.mpt.dsic.inside.ws.service.model.CertificadosLista;
 import es.mpt.dsic.inside.ws.service.model.ConfiguracionAmpliarFirma;
 import es.mpt.dsic.inside.ws.service.model.ContenidoInfo;
 import es.mpt.dsic.inside.ws.service.model.FirmaInfo;
@@ -31,12 +33,18 @@ import es.mpt.dsic.inside.ws.service.model.InfoDetalladaCertificado;
 import es.mpt.dsic.inside.ws.service.model.InformacionFirma;
 import es.mpt.dsic.inside.ws.service.model.ListaFirmaInfo;
 import es.mpt.dsic.inside.ws.service.model.ResultadoAmpliarFirma;
+import es.mpt.dsic.inside.ws.service.model.ResultadoValidacionFirmaInfo;
 import es.mpt.dsic.inside.ws.service.model.ResultadoValidacionFormatoAInfo;
 import es.mpt.dsic.inside.ws.service.model.ResultadoValidacionInfo;
 import es.mpt.dsic.inside.ws.service.model.ResultadoValidarCertificado;
 import es.mpt.dsic.inside.ws.service.model.TipoDeFirma;
 
 public class AfirmaModelToWsModelConverter {
+
+  // hide public constructor.
+  private AfirmaModelToWsModelConverter() {
+
+  }
 
   public static ResultadoValidacionInfo resultadoValidacionInfoAfirmaToResultadoValidacionInfo(
       ResultadoValidacionInfoAfirma resAfirma) {
@@ -51,6 +59,28 @@ public class AfirmaModelToWsModelConverter {
     return resultado;
 
   }
+
+
+  public static ResultadoValidacionFirmaInfo resultadoValidacionInfoAfirmaToResultadoValidacionInfoExt(
+      ResultadoValidacionInfoAfirmaExt resAfirma) {
+    if (resAfirma == null) {
+      return null;
+    }
+
+    ResultadoValidacionFirmaInfo resultado = new ResultadoValidacionFirmaInfo();
+    resultado.setEstado(resAfirma.isEstado());
+    resultado.setDetalle(resAfirma.getDetalle());
+    resultado.setNumeroFirmantes(resAfirma.getNumeroFirmantes());
+
+    if (resAfirma.getCertificados() != null && !resAfirma.getCertificados().isEmpty()) {
+      CertificadosLista certificadosLista = new CertificadosLista();
+      certificadosLista.setCertificado(resAfirma.getCertificados());
+      resultado.setCertificados(certificadosLista);
+    }
+    return resultado;
+
+  }
+
 
   public static InformacionFirma informacionFirmaAfirmaToInformacionFirma(
       InformacionFirmaAfirma infoAfirma) {
@@ -154,7 +184,7 @@ public class AfirmaModelToWsModelConverter {
     res.setNumeroSerie(resAfirma.getNumeroSerie());
 
     if (resAfirma.getInfoCertificado() != null) {
-      List<InfoDetalladaCertificado> detalle = new ArrayList<InfoDetalladaCertificado>();
+      List<InfoDetalladaCertificado> detalle = new ArrayList<>();
       for (Entry entry : resAfirma.getInfoCertificado().entrySet()) {
         detalle
             .add(new InfoDetalladaCertificado((String) entry.getKey(), (String) entry.getValue()));

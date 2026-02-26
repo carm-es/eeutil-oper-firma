@@ -1,0 +1,1 @@
+Este p12 esta vacio, habra que poner el correspondiente y referenciarlo en la tabla inside_aplicaciones_propiedad con sus valores correctos

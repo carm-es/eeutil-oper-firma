@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.ws.service;
@@ -25,6 +25,7 @@ import es.mpt.dsic.inside.ws.service.model.ListaFirmaInfo;
 import es.mpt.dsic.inside.ws.service.model.OpcionesObtenerInformacionFirma;
 import es.mpt.dsic.inside.ws.service.model.ResultadoAmpliarFirma;
 import es.mpt.dsic.inside.ws.service.model.ResultadoComprobarFirmaFormatoA;
+import es.mpt.dsic.inside.ws.service.model.ResultadoValidacionFirmaInfo;
 import es.mpt.dsic.inside.ws.service.model.ResultadoValidacionInfo;
 import es.mpt.dsic.inside.ws.service.model.ResultadoValidarCertificado;
 
@@ -43,21 +44,33 @@ public interface EeUtilOperFirmaUserNameTokenService {
   @WebResult(name = "ResultadoValidacionInfo", partName = "ResultadoValidacionInfo")
   public ResultadoValidacionInfo validacionFirma(
       @WebParam(name = "Firma") @XmlElement(required = true, name = "Firma") byte[] firma,
-      @WebParam(name = "TipoFirma") @XmlElement(required = false,
-          name = "TipoFirma") String tipoFirma,
-      @WebParam(name = "DatosFirmados") @XmlElement(required = false,
-          name = "DatosFirmados") DatosFirmados datosFirmados)
+      @WebParam(name = "TipoFirma")
+      @XmlElement(required = false, name = "TipoFirma") String tipoFirma,
+      @WebParam(name = "DatosFirmados")
+      @XmlElement(required = false, name = "DatosFirmados") DatosFirmados datosFirmados)
+      throws InSideException;
+
+  @WebMethod(operationName = "validacionFirmaInfo", action = "urn:validacionFirmaInfo")
+  @WebResult(name = "ResultadoValidacionFirmaInfo", partName = "ResultadoValidacionFirmaInfo")
+  public ResultadoValidacionFirmaInfo validacionFirmaInfo(
+      @WebParam(name = "Firma") @XmlElement(required = true, name = "Firma") byte[] firma,
+      @WebParam(name = "TipoFirma")
+      @XmlElement(required = false, name = "TipoFirma") String tipoFirma,
+      @WebParam(name = "DatosFirmados")
+      @XmlElement(required = false, name = "DatosFirmados") DatosFirmados datosFirmados,
+      @WebParam(name = "InfoCertificados")
+      @XmlElement(required = false, name = "InfoCertificados") boolean infoCertificados)
       throws InSideException;
 
   @WebMethod(operationName = "validarCertificado", action = "urn:validarCertificado")
   @WebResult(name = "resultadoValidarCertificado", partName = "resultadoValidarCertificado")
-  public ResultadoValidarCertificado validarCertificado(@WebParam(name = "certificate") @XmlElement(
-      required = true, name = "certificate") String certificate) throws InSideException;
+  public ResultadoValidarCertificado validarCertificado(@WebParam(name = "certificate")
+  @XmlElement(required = true, name = "certificate") String certificate) throws InSideException;
 
   @WebMethod(operationName = "getInfoCertificado", action = "urn:getInfoCertificado")
   @WebResult(name = "resultadoGetInfoCertificado", partName = "resultadoGetInfoCertificado")
-  public InfoCertificado getInfoCertificado(@WebParam(name = "certificate") @XmlElement(
-      required = true, name = "certificate") String certificate) throws InSideException;
+  public InfoCertificado getInfoCertificado(@WebParam(name = "certificate")
+  @XmlElement(required = true, name = "certificate") String certificate) throws InSideException;
 
   @WebMethod(operationName = "obtenerInformacionFirma", action = "urn:obtenerInformacionFirma")
   @WebResult(name = "resultadoObtenerInformacionFirma",
@@ -66,9 +79,8 @@ public interface EeUtilOperFirmaUserNameTokenService {
       @WebParam(name = "Firma") @XmlElement(required = true, name = "Firma") byte[] firma,
       @WebParam(name = "opcionesObtenerInformacionFirma") @XmlElement(required = true,
           name = "opcionesObtenerInformacionFirma") OpcionesObtenerInformacionFirma opciones,
-      @WebParam(name = "Contenido") @XmlElement(required = false,
-          name = "Contenido") byte[] contenido)
-      throws InSideException;
+      @WebParam(name = "Contenido")
+      @XmlElement(required = false, name = "Contenido") byte[] contenido) throws InSideException;
 
   @WebMethod(operationName = "ampliarFirma", action = "urn:ampliarFirma")
   @WebResult(name = "resultadoAmpliarFirma", partName = "resultadoAmpliarFirma")

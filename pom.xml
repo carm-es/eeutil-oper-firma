@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.carm.eeutil</groupId>
 	<artifactId>oper-firma-mvn-base-wrapper</artifactId>
-	<version>4.2.0-CARM.7-SNAPSHOT</version>
+	<version>6.8.2-CARM.9-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>eeutil-oper-firma</name>
@@ -28,7 +28,7 @@
 	<properties>
 		<version.java>1.8</version.java>
 		<codificacion>UTF-8</codificacion>
-		<version.eeutils-shared>4.2.0-CARM.9</version.eeutils-shared>
+		<version.eeutils-shared>6.8.2-CARM.16</version.eeutils-shared>
 	</properties>
 
 	<repositories>
@@ -84,12 +84,11 @@
 				<plugin>
 					<groupId>net.revelc.code.formatter</groupId>
 					<artifactId>formatter-maven-plugin</artifactId>
-					<version>2.13.0</version>
+					<version>2.16.0</version>
 					<configuration>
 						<configFile>${maven.multiModuleProjectDirectory}/.mvn/eclipse-java-google-style.xml</configFile>
 						<encoding>UTF-8</encoding>
-						<argLine>-Dfile.encoding=UTF-8</argLine>
-						<lineEnding>LF</lineEnding>
+						<lineEnding>AUTO</lineEnding>
 						
 						<directories>
 							<directory>${basedir}/src/main/java</directory>
