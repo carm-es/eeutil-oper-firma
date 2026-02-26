@@ -8,7 +8,7 @@
   <parent>
     <groupId>es.carm.eeutil</groupId>
     <artifactId>oper-firma-mvn-base-wrapper</artifactId>
-    <version>6.8.2-CARM.9-SNAPSHOT</version>
+    <version>6.8.2-CARM.9</version>
     <relativePath>../..</relativePath>
   </parent>
   <!-- scm>
@@ -17,7 +17,7 @@
 		<url>http://dev.map.es/trac/InSide/browser/trunk/Desarrollo/inside-mvn-base/</url>
 	</scm-->
   <organization>
-    <name>Ministerio de Politica Territorial y Administraci&#xF3;n P&#xFA;blica</name>
+    <name>Ministerio de Politica Territorial y Administración Pública</name>
     <url>http://www.mpt.es</url>
   </organization>
   <modules>
