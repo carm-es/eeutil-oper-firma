@@ -40,6 +40,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <afirma.version>1.7.0</afirma.version>
     <sonar.maven.version>3.7.0.1746</sonar.maven.version>
+    <logging.log4j>2.6.2</logging.log4j>
   </properties>
   <distributionManagement>
     <repository>
@@ -292,21 +293,19 @@
       <!-- 			</dependency> -->
       <!-- Loggin. Valorar el uso de slf -->
       <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-log4j12</artifactId>
-        <version>1.7.24</version>
-        <scope>compile</scope>
-      </dependency>
-      <dependency>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
-        <version>1.1.1</version>
+        <version>1.2</version>
       </dependency>
       <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>1.2.17</version>
-        <scope>compile</scope>
+        <groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-api</artifactId>
+	<version>${logging.log4j}</version>
+      </dependency>
+      <dependency>
+	<groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-core</artifactId>
+	<version>${logging.log4j}</version>
       </dependency>
       <dependency>
         <groupId>biz.paluch.logging</groupId>
@@ -385,12 +384,9 @@
           </excludes>
           <forkMode>never</forkMode>
           <skipTests>${skip.tests}</skipTests>
-          <systemProperties>
-            <property>
-              <name>config.path</name>
-              <value>${basedir}/src/main/config/${config.folder}</value>
-            </property>
-          </systemProperties>
+          <systemPropertyVariables>
+            <config.path>${basedir}/src/main/config/${config.folder}</config.path>
+          </systemPropertyVariables>
         </configuration>
         <!-- Ejecucion de Test de integración -->
         <executions>
