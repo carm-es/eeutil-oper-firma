@@ -6,7 +6,7 @@
   <parent>
     <groupId>es.gob.ad.gestdoc</groupId>
     <artifactId>eeutil-mvn-base-oper-firma</artifactId>
-    <version>6.8.2-CARM.14-SNAPSHOT</version>
+    <version>6.8.2-CARM.14</version>
     <relativePath>../eeutil-mvn-base</relativePath>
   </parent>
   <properties>
